@@ -19,14 +19,14 @@ _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster u
 
 **Encryption**
 
-Create a directory at /opt/node\_exporter to store the certificates and config.yml file. The Node Exporter can be set up and run using Docker and Docker Compose, binary installation via Ansible playbook, or manually.
+Create a directory at `/opt/node_exporter` to store the certificates and `config.yml` file. The `node_exporter` can be set up and run using Docker and Docker Compose, binary installation via Ansible playbook, or manually.
 
 ```bash
 node_exporter
 └── configs
 ```
 
-Generating self-signed SSL/TLS certificate and private key with openssl .
+Generating self-signed SSL/TLS certificate and private key with `openssl` .
 
 ```bash
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /opt/node_exporter/configs/node_exporter.key -out /opt/node_exporter/configs/node_exporter.crt -subj "/C=US/ST=California/L=Oakland/O=MyOrg/CN=localhost" -addext "subjectAltName = DNS:localhost"
@@ -34,7 +34,7 @@ openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /opt/node_expor
 
 **Authentication**
 
-Create a hashed password with htpasswd from httpd-tools in RedHat-based and apache2-utilspackage in Debian-based distributions.
+Create a hashed password with `htpasswd` from `httpd-tools` in RedHat-based and `apache2-utils` package in Debian-based distributions.
 
 ```bash
 htpasswd -nBC 12 "" | tr -d ':\n'
@@ -44,7 +44,7 @@ htpasswd -nBC 12 "" | tr -d ':\n'
 # -C This flag is only allowed in combination with -B (bcrypt hashing). It sets the computing time used for thebcrypt algorithm (higher is more secure but slower, default: 5, valid: 4 to 17).
 ```
 
-Or with a programming language, here is a Python script that uses python3-bcryptto prompt for a password and hash it.
+Or with a programming language, here is a Python script that uses `python3-bcrypt` to prompt for a password and hash it.
 
 ```python
 #!/usr/bin/python3
@@ -57,7 +57,7 @@ hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 print(hashed_password.decode())
 ```
 
-Save that script as gen-pass.py and run it python3 gen-pass.py , which should prompt you for a password.
+Save that script as `gen-pass.py` and run it python3 `gen-pass.py` , which should prompt you for a password.
 
 ```text
 password:
@@ -66,7 +66,7 @@ $2b$12$hNf2lSsxfm0.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay
 
 **Setting up and Configuring Node Exporter**
 
-Use your beloved editor, mine is vim and add certificates and authentication into /opt/node\_exporter/configs/config.yml .
+Use your beloved editor, mine is vim and add certificates and authentication into `/opt/node_exporter/configs/config.yml` .
 
 ```yaml
 tls_server_config:
@@ -76,7 +76,7 @@ basic_auth_users:
   <USER>: <HASHED-PASSWD>
 ```
 
-The node\_exporter will be running with the config.yml , so add the --web.config.file argument to command in /opt/node\_exporter/docker-compose.yml , Also the configs directory is going to be mounted as/etc/node\_exporter in container.
+The `node_exporter` will be running with the `config.yml` , so add the `--web.config.file` argument to command in `/opt/node_exporter/docker-compose.yml` , Also the configs directory is going to be mounted as `/etc/node_exporter` in container.
 
 ```yaml
 services:
@@ -99,13 +99,13 @@ services:
       - 9100:9100
 ```
 
-Change the ownership of the /opt/node\_exporter/configsdirectory to nobodyaccording to the [Dockerfile](https://github.com/prometheus/node_exporter/blob/master/Dockerfile#L11), for the permission denied Problem.
+Change the ownership of the `/opt/node_exporter/configs` directory to `nobody` according to the [Dockerfile](https://github.com/prometheus/node_exporter/blob/master/Dockerfile#L11), for the permission denied Problem.
 
 ```bash
 chown -R nobody:nobody /opt/node_exporter/configs
 ```
 
-Run the docker-compos.yml , I'd like to use the exact docker-composepath
+Run the `docker-compos.yml` , I'd like to use the exact `docker-compose` path
 
 ```bash
 docker compose -f /opt/node_exporter/configs/docker-compose.yml up -d
@@ -117,7 +117,7 @@ To see node-exporter service logs, Again the exact path :)
 docker compose -f /opt/node_exporter/configs/docker-compose.yml logs -f
 ```
 
-Output should be msg="TLS is enabled." http2=true address=[::]:9100
+Output should be `msg="TLS is enabled." http2=true address=[::]:9100`
 
 ```text
 node-exporter | time=2025-03-02T22:18:16.472Z level=INFO source=node_exporter.go:141 msg=zfs
@@ -142,7 +142,7 @@ mv kube-prometheus-stack kube-prometheus-stack-<version> # To keep and Track Ver
 cd kube-prometheus-stack-<version> # Happy Editing Helm Values!
 ```
 
-Encode the certificate /opt/node\_exporter/configs/node\_exporter.crt to create a Secret in the Kubernetes cluster.
+Encode the certificate `/opt/node_exporter/configs/node_exporter.crt` to create a Secret in the Kubernetes cluster.
 
 ```bash
 base64 -w 0 /opt/node_exporter/configs/node_exporter.crt 
@@ -152,7 +152,7 @@ base64 -w 0 /opt/node_exporter/configs/node_exporter.crt
 # wrap encoded lines after COLS character (default 76). Use 0 to disable line wrapping
 ```
 
-Create Secret, it has to be in the same namespace as the Prometheus namespace. kubectl apply -f node01-node-exporter-secret.yaml -n prometheus .
+Create Secret, it has to be in the same namespace as the Prometheus namespace.
 
 ```yaml
 apiVersion: v1
@@ -165,11 +165,17 @@ data:
   node01.node_exporter.crt: "<base64-encoded-cert>"
 ```
 
+Apply the Secret
+
+```bash
+kubectl apply -f node01-node-exporter-secret.yaml -n prometheus
+```
+
 **Add the Secret**
 
-include secret with prometheus.psometheusSpec.secret in values.yaml ; As the comment says secrets will be mounted in /etc/prometheus/secrets .
+include secret with `prometheus.psometheusSpec.secret` in `values.yaml` ; As the comment says secrets will be mounted in `/etc/prometheus/secrets` .
 
-in this case the node01-node-exporter-crt could be found in /etc/prometheus/secrets/node01-node-exporter-crt/node01.node\_exporter.crt in Prometheus pods.
+in this case the `node01-node-exporter-crt` could be found in `/etc/prometheus/secrets/node01-node-exporter-crt/node01.node_exporter.crt` in the Prometheus pods.
 
 ```yaml
 ---
@@ -184,9 +190,9 @@ prometheus:
       - node01-node-exporter-crt
 ```
 
-**Add**  **additionalScrapeConfigs**
+**Add `additionalScrapeConfigs`**
 
-include external-nodes job with additionalScrapeConfigs in values.yaml , the scheme has to be https , set the tls\_config and basic\_auth
+include `external-nodes` job with `additionalScrapeConfigs` in `values.yaml` , the `scheme` has to be `https` , set the `tls_config` and `basic_auth`.
 
 ```yaml
 ---
@@ -219,13 +225,13 @@ prometheus:
               instance: "node01"
 ```
 
-Apply changes with helm upgrade
+Apply changes with `helm upgrade`
 
 ```bash
 helm upgrade --install prometheus-stack . -n prometheus --values values.yaml
 ```
 
-It could be done with iptables or firewalls to allow trusted IPs to scrape the node on the 9100 port. I’d prefer to have security more than that, actually utilizing both Encryption/Authentication alongside the iptables rule is the best practice.
+It could be done with `iptables` or `firewalls` to allow trusted IPs to scrape the node on the `9100` port. I’d prefer to have security more than that, actually utilizing both Encryption/Authentication alongside the `iptables` rule is the best practice.
 
 I assume the egress IP of the Kubernetes cluster is a single IP, otherwise, the IP range should be allowed via iptables .
 
