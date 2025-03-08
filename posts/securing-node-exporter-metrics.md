@@ -8,7 +8,7 @@ id: 2319305
 date: '2025-03-08T19:36:55Z'
 ---
 
-_there’s a need to scrape metrics from nodes outside of a Kubernetes cluster using Node Exporter. But what happens if these nodes are exposed to the internet? In such cases, it’s crucial to implement both encryption and authentication to secure the communication._
+_There’s a need to scrape metrics from nodes outside of a Kubernetes cluster using Node Exporter. But what if these nodes are exposed to the internet? In such cases, it’s crucial to implement both encryption and authentication to secure the communication._
 
 **Steps to Secure and Scrape Node Exporter Metrics**
 
