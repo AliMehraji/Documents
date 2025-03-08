@@ -5,6 +5,8 @@ description: Difference between Special $@ and $* Parameters in bash.
 tags: 'bash,gnulinux,linux'
 cover_image: ./assets/special-parameters-in-bash.webp
 canonical_url: null
+id: 2319639
+date: '2025-03-08T22:48:26Z'
 ---
 
 There is a say no difference between `$@` and `$*` in Shell! What ?!!
