@@ -47,12 +47,12 @@ jobs:
         dry_run: false
 
     # (Optional) Add comment with dev.to changes if it's a pull request.
-    # - uses: actions-ecosystem/action-create-comment@v1
-    #   if: ${{ github.event_name == 'pull_request' }}
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     body: |
-    #       Changes result:
-    #       ```
-    #       ${{ steps.publish_devto.outputs.result_summary }}
-    #       ```
+    - uses: actions-ecosystem/action-create-comment@v1
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        github_token: ${{ secrets.GH_TOKEN }}
+        body: |
+          Changes result:
+          ```
+          ${{ steps.publish_devto.outputs.result_summary }}
+          ```
