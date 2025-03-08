@@ -1,9 +1,11 @@
 ---
 title: Securing Node Exporter Metrics
 published: true
-tags: nodeexporter,prometheus,monitoring,kubernetes
+tags: 'nodeexporter,prometheus,monitoring,kubernetes'
 cover_image: ./assets/securing-node-exporter-metrics.webp
 canonical_url: null
+id: 2319305
+date: '2025-03-08T19:36:55Z'
 ---
 
 _there’s a need to scrape metrics from nodes outside of a Kubernetes cluster using Node Exporter. But what happens if these nodes are exposed to the internet? In such cases, it’s crucial to implement both encryption and authentication to secure the communication._
