@@ -1,6 +1,7 @@
 ---
 title: Securing Node Exporter Metrics
 published: true
+description: Scrape metrics from nodes outside of a Kubernetes cluster using Encrypted and Authenticated Node Exporter.
 tags: 'nodeexporter,prometheus,monitoring,kubernetes'
 cover_image: ./assets/securing-node-exporter-metrics.webp
 canonical_url: null
