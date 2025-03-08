@@ -21,8 +21,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     env:
-      GIT_COMMITTER_NAME: a.mehraji
-      GIT_COMMITTER_EMAIL: a.mehraji75@gmail.com
+      GIT_COMMITTER_NAME: "a.mehraji"
+      GIT_COMMITTER_EMAIL: "a.mehraji75@gmail.com"
 
     steps:
     - uses: actions/checkout@v2
