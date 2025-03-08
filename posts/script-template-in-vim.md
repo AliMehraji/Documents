@@ -3,6 +3,7 @@ title: Script Template in vim
 published: true
 description: Defining a Script Template with files suffix in vim.
 tags: 'vim,template,script'
+cover_image: ./assets/script-template-in-vim/vim-1.webp
 canonical_url: null
 id: 2319653
 date: '2025-03-08T23:05:25Z'
@@ -10,7 +11,7 @@ date: '2025-03-08T23:05:25Z'
 
 ## Have you ever tried creating `Bash`/`Python` or other Script templates with Vim?
 
-![](../posts/assets/script-template-in-vim/vim-1.webp)
+
 
 Every time I wrote Bash or Python scripts in Vim, I had to add the Shebang `#! /bin/bash` or `#! /usr/bin/python` in the scripts manually.
 
@@ -61,7 +62,7 @@ au bufnewfile *.sh 0r $HOME/.vim/sh_template.temp
 
 `vi Shell_Script.sh`
 
-![](../posts/assets/script-template-in-vim/vim-2.webp)
+![](./assets/script-template-in-vim/vim-2.webp)
 
 **Conclusion:**
 
