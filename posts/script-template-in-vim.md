@@ -4,6 +4,8 @@ published: true
 description: Defining a Script Template with files suffix in vim.
 tags: 'vim,template,script'
 canonical_url: null
+id: 2319653
+date: '2025-03-08T23:05:25Z'
 ---
 
 ## Have you ever tried creating `Bash`/`Python` or other Script templates with Vim?
