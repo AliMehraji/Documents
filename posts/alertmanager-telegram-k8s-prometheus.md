@@ -327,7 +327,7 @@ kubectl apply -f alertmanagerconfig-telegram.yaml -n prometheus
 
 </br>
 
-After all changes made in the `values.yaml`, apply changes , in the case you installed the `prometheus-stack` with `helm`
+After all changes are made in the `values.yaml`, apply changes , in the case you installed the `prometheus-stack` with `helm`
 
 ```bash
 helm upgrade prometheus-stack . -n prometheus --values values.yaml
@@ -374,5 +374,39 @@ spec:
 kubectl apply -f targets-prometheus-rules.yaml -n prometheus
 ```
 
+## Example Message in Telegram
+
+```text
+⚪️ Alert: PrometheusTargetMissing
+Status: ✅ RESOLVED
+Severity: 🟢 Warning
+Job: kube-proxy
+Namespace: kube-system
+Instance: 192.168.173.192:10249
+Job: kube-proxy
+Namespace: kube-system
+Instance: 192.168.173.27:10249
+Job: kube-proxy
+Namespace: kube-system
+Instance: 192.168.173.31:10249
+```
+
+```text
+🔴 Alert: KubeControllerManagerDown
+Status: 🔥 FIRING
+Severity: 🔴 Critical
+RunbookURL
+```
+
+```text
+🔴 Alert: KubeSchedulerDown
+Status: 🔥 FIRING
+Severity: 🔴 Critical
+RunbookURL
+```
+
+- Read about the [RunbookURL][3]
+
 [1]: https://www.directual.com/lesson-library/how-to-create-a-telegram-bot
 [2]: https://core.telegram.org/bots/tutorial
+[3]: https://runbooks.prometheus-operator.dev/
