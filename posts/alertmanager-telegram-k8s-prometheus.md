@@ -313,25 +313,29 @@ kubectl apply -f alertmanagerconfig-telegram.yaml -n prometheus
 
     ```
 
-  ```yaml
-  alertmanager:
+    ```yaml
+    alertmanager:
     alertmanagerSpec:
-      ## Defines the strategy used by AlertmanagerConfig objects to match alerts. eg:
-      ##
-      alertmanagerConfigMatcherStrategy:
+        ## Defines the strategy used by AlertmanagerConfig objects to match alerts. eg:
+        ##
+        alertmanagerConfigMatcherStrategy:
         type: None
         ## Example with use OnNamespace strategy
         # alertmanagerConfigMatcherStrategy:
         #   type: OnNamespace
-  ```
+    ```
 
-After all changes in the `values.yaml`, apply changes , in the case you installed the `prometheus-stack` with `helm`
+</br>
+
+After all changes made in the `values.yaml`, apply changes , in the case you installed the `prometheus-stack` with `helm`
 
 ```bash
 helm upgrade prometheus-stack . -n prometheus --values values.yaml
 ```
 
 ## Example alerts via `prometheus-rule`
+
+Create a file named `targets-prometheus-rules.yaml` with contents:
 
 ```yaml
 ---
@@ -364,6 +368,10 @@ spec:
           annotations:
             summary: Host out of memory (instance {{ $labels.instance }})
             description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+```
+
+```bash
+kubectl apply -f targets-prometheus-rules.yaml -n prometheus
 ```
 
 [1]: https://www.directual.com/lesson-library/how-to-create-a-telegram-bot
