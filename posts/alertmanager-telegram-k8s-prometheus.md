@@ -5,6 +5,8 @@ description: Add Telegram Receiver for alertmanager for prometheus-stack in k8s 
 tags: 'alertmanager,prometheus,monitoring,kubernetes'
 cover_image: ./assets/alertmanager-to-telegram.webp
 canonical_url: null
+id: 2320569
+date: '2025-03-09T12:06:12Z'
 ---
 
 ### [How to create a Telegram bot][1]
