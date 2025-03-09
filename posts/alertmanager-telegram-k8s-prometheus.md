@@ -285,45 +285,45 @@ kubectl apply -f alertmanagerconfig-telegram.yaml -n prometheus
 </br>
 
 - `alertmanagerConfigMatcherStrategy` with the `None` Type the `AlertmanagerConfig` will match the all alerts.
-  
-    ```bash
-    kubectl explain Alertmanager.spec.alertmanagerConfigMatcherStrategy
-    ```
 
-    ```text
-    GROUP:      monitoring.coreos.com
-    KIND:       Alertmanager
-    VERSION:    v1
+  ```bash
+  kubectl explain Alertmanager.spec.alertmanagerConfigMatcherStrategy
+  ```
 
-    FIELD: alertmanagerConfigMatcherStrategy <Object>
+  ```text
+  GROUP:      monitoring.coreos.com
+  KIND:       Alertmanager
+  VERSION:    v1
+
+  FIELD: alertmanagerConfigMatcherStrategy <Object>
 
 
-    DESCRIPTION:
-        AlertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects
-        process incoming alerts.
+  DESCRIPTION:
+      AlertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects
+      process incoming alerts.
         
-    FIELDS:
-    type	<string>
-    enum: OnNamespace, None
-        AlertmanagerConfigMatcherStrategyType defines the strategy used by
-        AlertmanagerConfig objects to match alerts in the routes and inhibition
-        rules.
-        
-        The default value is `OnNamespace`.
+  FIELDS:
+  type	<string>
+  enum: OnNamespace, None
+    AlertmanagerConfigMatcherStrategyType defines the strategy used by
+    AlertmanagerConfig objects to match alerts in the routes and inhibition
+    rules.
+    
+    The default value is `OnNamespace`.
 
-    ```
+  ```
 
-    ```yaml
-    alertmanager:
-    alertmanagerSpec:
-        ## Defines the strategy used by AlertmanagerConfig objects to match alerts. eg:
-        ##
-        alertmanagerConfigMatcherStrategy:
-        type: None
-        ## Example with use OnNamespace strategy
-        # alertmanagerConfigMatcherStrategy:
-        #   type: OnNamespace
-    ```
+  ```yaml
+  alertmanager:
+  alertmanagerSpec:
+      ## Defines the strategy used by AlertmanagerConfig objects to match alerts. eg:
+      ##
+      alertmanagerConfigMatcherStrategy:
+      type: None
+      ## Example with use OnNamespace strategy
+      # alertmanagerConfigMatcherStrategy:
+      #   type: OnNamespace
+  ```
 
 </br>
 
