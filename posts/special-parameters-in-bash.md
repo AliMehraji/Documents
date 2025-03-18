@@ -18,7 +18,7 @@ So Let’s see What the difference is . Create a script and try it one by one
 First One `$@` :
 
 ```bash
-#! /bin/bash 
+#! /bin/bash
 
 MAIN()
 {
@@ -31,7 +31,7 @@ MAIN $@
 Execute it like below and give the script some arguments:
 
 ```bash
-$ ./Diff.sh "Jhon Smith" "Marry Ann" 
+$ ./Diff.sh "Jhon Smith" "Marry Ann"
 $ First Parameter is Jhon
 
 ```
@@ -39,7 +39,7 @@ $ First Parameter is Jhon
 Second One `$*` :
 
 ```bash
-#! /bin/bash 
+#! /bin/bash
 
 MAIN()
 {
@@ -52,7 +52,7 @@ MAIN $*
 The result will be :
 
 ```bash
-$ ./Diff.sh "Jhon Smith" "Marry Ann" 
+$ ./Diff.sh "Jhon Smith" "Marry Ann"
 $ First Parameter is Jhon
 ```
 
@@ -61,7 +61,7 @@ Far Now There is no difference, maybe those people were right!
 Let us go further and try them with double quotes `"$@"` :
 
 ```bash
-#! /bin/bash 
+#! /bin/bash
 
 MAIN()
 {
@@ -72,14 +72,14 @@ MAIN "$@"
 ```
 
 ```bash
-$ ./Diff.sh "Jhon Smith" "Marry Ann" 
+$ ./Diff.sh "Jhon Smith" "Marry Ann"
 $ First Parameter is Jhon Smith
 ```
 
 The second one in double quotes `"$*"` :
 
 ```bash
-#! /bin/bash 
+#! /bin/bash
 
 MAIN()
 {
@@ -90,7 +90,7 @@ MAIN "$*"
 ```
 
 ```bash
-$ ./Diff.sh "Jhon Smith" "Marry Ann" 
+$ ./Diff.sh "Jhon Smith" "Marry Ann"
 $ First Parameter is Jhon Smith Marry Ann
 ```
 

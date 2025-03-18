@@ -120,7 +120,7 @@ DESCRIPTION:
     Telegram bot token. It is mutually exclusive with `botTokenFile`.
     The secret needs to be in the same namespace as the AlertmanagerConfig
     object and accessible by the Prometheus Operator.
-    
+
     Either `botToken` or `botTokenFile` is required.
 
   chatID	<integer> -required-
@@ -211,9 +211,9 @@ kubectl apply -f alertmanagerconfig-telegram.yaml -n prometheus
 ### The `alertmanager` changes in the`prometheus-stack` `values.yaml`
 
 - Templates in `alertmanager.templateFiles` will be mounted in `/etc/alertmanager/config/*.tmpl`.
-  
+
   > The `telegram.tmpl` will be mounted as `/etc/alertmanager/config/telegram.tmpl`, with defining the `{{ define "telegram.default.message" }}` there is no need to define `message` in the `AlertmanagerConfig.spec.receivers.telegramConfigs`. with that the default template for the telegram will be overwritten.
-  
+
   ```yaml
   alertmanager:
     templateFiles:
@@ -251,7 +251,7 @@ kubectl apply -f alertmanagerconfig-telegram.yaml -n prometheus
 
         {{- if .Annotations.runbook_url }}
         [RunbookURL]({{ .Annotations.runbook_url }})
-        
+
         {{- end }}
         {{- end }}
         {{ end }}
@@ -301,14 +301,14 @@ kubectl apply -f alertmanagerconfig-telegram.yaml -n prometheus
   DESCRIPTION:
       AlertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects
       process incoming alerts.
-        
+
   FIELDS:
   type	<string>
   enum: OnNamespace, None
     AlertmanagerConfigMatcherStrategyType defines the strategy used by
     AlertmanagerConfig objects to match alerts in the routes and inhibition
     rules.
-    
+
     The default value is `OnNamespace`.
 
   ```

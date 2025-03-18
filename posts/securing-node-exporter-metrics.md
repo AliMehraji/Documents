@@ -146,7 +146,7 @@ cd kube-prometheus-stack-<version> # Happy Editing Helm Values!
 Encode the certificate `/opt/node_exporter/configs/node_exporter.crt` to create a Secret in the Kubernetes cluster.
 
 ```bash
-base64 -w 0 /opt/node_exporter/configs/node_exporter.crt 
+base64 -w 0 /opt/node_exporter/configs/node_exporter.crt
 
 # man base64, `-w`
 # -w, --wrap=COLS
@@ -220,7 +220,7 @@ prometheus:
           username: <USER> # the user you set in the node-exporter in the node
           password: <Plain-Text-Password> # the plain text password which you hashed in the Encryption step
         static_configs:
-          - targets: 
+          - targets:
               - "<Remote-HOST-IP>:9100"
             labels:
               instance: "node01"
@@ -237,7 +237,7 @@ It could be done with `iptables` or `firewalls` to allow trusted IPs to scrape t
 I assume the egress IP of the Kubernetes cluster is a single IP, otherwise, the IP range should be allowed via iptables .
 
 ```bash
-# Allow only IP <K8S-Egress-IP> to access port 9100 (TCP) 
+# Allow only IP <K8S-Egress-IP> to access port 9100 (TCP)
 iptables -A INPUT -p tcp -d <HOST-IP> --dport 9100 -s <K8S-Egress-IP> -m state --state NEW,ESTABLISHED -m comment --comment "Allow IP <K8S-Egress-IP> to access the 9100 port " -j ACCEPT
 
 # Block all other incoming traffic to port 9100

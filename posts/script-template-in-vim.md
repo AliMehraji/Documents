@@ -27,11 +27,11 @@ So how can we automate this process with Vim to catch `*.sh` or `*.py` extension
 # Author: < Your Name >
 # Email: <Your Email>
 
-# Script Name:  
-# Date Created: 
-# Last Modified: 
+# Script Name:
+# Date Created:
+# Last Modified:
 
-# Description: 
+# Description:
 # < Description of what is this script for >
 
 # Usage:
@@ -48,7 +48,7 @@ set -xe
 
 ```vim
 " ========= Shell Script Template ========================
-au bufnewfile *.sh 0r $HOME/.vim/sh_template.temp 
+au bufnewfile *.sh 0r $HOME/.vim/sh_template.temp
 ```
 
 **Note:**
