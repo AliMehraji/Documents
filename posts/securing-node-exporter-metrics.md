@@ -11,6 +11,20 @@ date: '2025-03-08T19:36:55Z'
 
 _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster using Node Exporter. But what if these nodes are exposed to the internet? In such cases, it’s crucial to implement both encryption and authentication to secure the communication._
 
+## Steps to Secure and Scrape Node Exporter Metrics
+
+1. Node Exporter Configuration for Secure Metrics Exposure.
+   1. Encryption: Generating and Implementing SSL/TLS Certificates.
+   2. Authentication: Setting Up Basic Authentication for Secure Access.
+2. Prometheus Configuration to Scrape Metrics from External Nodes in Kubernetes
+   1. with `Helm` `values.yaml`.
+   2. with the `ScrapeConfig` Resource.
+3. Setup Firewall or `iptables` to allow trusted IPs.
+
+</br>
+
+## Node Exporter Configuration
+
 ### Encryption
 
 Create a directory at `/opt/node_exporter` to store the certificates and `config.yml` file. The `node_exporter` can be set up and run using Docker and Docker Compose, binary installation via Ansible playbook, or manually.
@@ -118,6 +132,10 @@ node-exporter | time=2025-03-02T22:18:16.472Z level=INFO source=node_exporter.go
 node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:347 msg="Listening on" address=[::]:9100
 node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:383 msg="TLS is enabled." http2=true address=[::]:9100
 ```
+
+</br></br>
+
+## Prometheus Configuration
 
 ### Add `scrapeConfig` to the `prometheus-stack` in the K8S cluster
 
@@ -227,6 +245,8 @@ Apply changes with `helm upgrade`
 helm upgrade --install prometheus-stack . -n prometheus --values values.yaml
 ```
 
+</br>
+
 ## The `scrapeconfigs.monitoring.coreos.com` CRD
 
 Instead of doing the below steps you can create a `ScrapeConfig` resource and avoid to have many changes in `values.yaml`.
@@ -286,7 +306,7 @@ spec:
 
 ## Firewall or `iptables`
 
-Utilizing both Encryption/Authentication alongside the `iptables` rule is the best practice. It could be done with `iptables` or `firewalls` to allow trusted IPs to scrape the node on the `9100` port.
+Encryption/Authentication alongside the `iptables` rule is the best practice. It could be done with `iptables` or `firewalls` to allow trusted IPs to scrape the node on the `9100` port.
 
 I assume the egress IP of the Kubernetes cluster is a single IP, otherwise, the IP range should be allowed via iptables .
 
