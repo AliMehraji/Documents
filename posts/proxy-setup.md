@@ -1,8 +1,8 @@
 ---
 title: Setup Proxy for Services and Applications in Linux
 published: true
-description: 
-tags: 'linux,proxy,socks5,docker,podman,dropbox,discord,vscode'
+description: Setup Proxy for applications or services in linux such as Docker, Podman, or Discord, Dropbox.
+tags: 'linux,proxy,socks5,docker,podman'
 canonical_url: null
 
 ---
