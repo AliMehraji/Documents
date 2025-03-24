@@ -11,14 +11,7 @@ date: '2025-03-08T19:36:55Z'
 
 _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster using Node Exporter. But what if these nodes are exposed to the internet? In such cases, it’s crucial to implement both encryption and authentication to secure the communication._
 
-## Steps to Secure and Scrape Node Exporter Metrics
-
-1. _Encryption: Generating and Implementing SSL/TLS Certificates_
-2. _Authentication: Setting Up Basic Authentication for Secure Access_
-3. _Configuring Node Exporter for Secure Metrics Exposure_
-4. _Configuring Prometheus to Scrape Metrics from External Nodes in_ _Kubernetes_
-
-## Encryption
+### Encryption
 
 Create a directory at `/opt/node_exporter` to store the certificates and `config.yml` file. The `node_exporter` can be set up and run using Docker and Docker Compose, binary installation via Ansible playbook, or manually.
 
@@ -33,7 +26,7 @@ Generating self-signed SSL/TLS certificate and private key with `openssl` .
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /opt/node_exporter/configs/node_exporter.key -out /opt/node_exporter/configs/node_exporter.crt -subj "/C=US/ST=California/L=Oakland/O=MyOrg/CN=localhost" -addext "subjectAltName = DNS:localhost"
 ```
 
-## Authentication
+### Authentication
 
 Create a hashed password with `htpasswd` from `httpd-tools` in RedHat-based and `apache2-utils` package in Debian-based distributions.
 
@@ -65,7 +58,7 @@ password:
 $2b$12$hNf2lSsxfm0.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay
 ```
 
-## Setting up and Configuring Node Exporter
+### Setup and Configure the `node_exporter`
 
 Use your beloved editor, mine is vim and add certificates and authentication into `/opt/node_exporter/configs/config.yml` .
 
@@ -126,7 +119,7 @@ node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:34
 node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:383 msg="TLS is enabled." http2=true address=[::]:9100
 ```
 
-## Add `scrapeConfig` to the `prometheus-stack` in the K8S cluster
+### Add `scrapeConfig` to the `prometheus-stack` in the K8S cluster
 
 Happy editing helm values.yaml ! I’d like to pull the helm charts to keep and track versioning in a git repository.
 
@@ -153,7 +146,7 @@ base64 -w 0 /opt/node_exporter/configs/node_exporter.crt
 # wrap encoded lines after COLS character (default 76). Use 0 to disable line wrapping
 ```
 
-## Secret of the Certificate
+### Secret of the Certificate
 
 Create Secret, it has to be in the same namespace as the Prometheus namespace.
 
@@ -174,7 +167,7 @@ Apply the Secret
 kubectl apply -f node01-node-exporter-secret.yaml -n prometheus
 ```
 
-## Include the Secret
+### Include the Secret
 
 include secret with `prometheus.psometheusSpec.secret` in `values.yaml` ; As the comment says secrets will be mounted in `/etc/prometheus/secrets` .
 
@@ -193,7 +186,7 @@ prometheus:
       - node01-node-exporter-crt
 ```
 
-## Add `additionalScrapeConfigs`
+### Add `additionalScrapeConfigs`
 
 include `external-nodes` job with `additionalScrapeConfigs` in `values.yaml` , the `scheme` has to be `https` , set the `tls_config` and `basic_auth`.
 
