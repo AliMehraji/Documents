@@ -11,14 +11,14 @@ date: '2025-03-08T19:36:55Z'
 
 _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster using Node Exporter. But what if these nodes are exposed to the internet? In such cases, it’s crucial to implement both encryption and authentication to secure the communication._
 
-**Steps to Secure and Scrape Node Exporter Metrics**
+## Steps to Secure and Scrape Node Exporter Metrics
 
 1. _Encryption: Generating and Implementing SSL/TLS Certificates_
 2. _Authentication: Setting Up Basic Authentication for Secure Access_
 3. _Configuring Node Exporter for Secure Metrics Exposure_
 4. _Configuring Prometheus to Scrape Metrics from External Nodes in_ _Kubernetes_
 
-**Encryption**
+## Encryption
 
 Create a directory at `/opt/node_exporter` to store the certificates and `config.yml` file. The `node_exporter` can be set up and run using Docker and Docker Compose, binary installation via Ansible playbook, or manually.
 
@@ -33,7 +33,7 @@ Generating self-signed SSL/TLS certificate and private key with `openssl` .
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout /opt/node_exporter/configs/node_exporter.key -out /opt/node_exporter/configs/node_exporter.crt -subj "/C=US/ST=California/L=Oakland/O=MyOrg/CN=localhost" -addext "subjectAltName = DNS:localhost"
 ```
 
-**Authentication**
+## Authentication
 
 Create a hashed password with `htpasswd` from `httpd-tools` in RedHat-based and `apache2-utils` package in Debian-based distributions.
 
@@ -65,7 +65,7 @@ password:
 $2b$12$hNf2lSsxfm0.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay
 ```
 
-**Setting up and Configuring Node Exporter**
+## Setting up and Configuring Node Exporter
 
 Use your beloved editor, mine is vim and add certificates and authentication into `/opt/node_exporter/configs/config.yml` .
 
@@ -100,7 +100,7 @@ services:
       - 9100:9100
 ```
 
-Change the ownership of the `/opt/node_exporter/configs` directory to `nobody` according to the [Dockerfile](https://github.com/prometheus/node_exporter/blob/master/Dockerfile#L11), for the permission denied Problem.
+Change the ownership of the `/opt/node_exporter/configs` directory to `nobody` according to the [Dockerfile][4], for the permission denied Problem.
 
 ```bash
 chown -R nobody:nobody /opt/node_exporter/configs
@@ -126,7 +126,7 @@ node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:34
 node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:383 msg="TLS is enabled." http2=true address=[::]:9100
 ```
 
-**Add**  **scrapeConfigto the**  **prometheus-stackin the K8S cluster**
+## Add `scrapeConfig` to the `prometheus-stack` in the K8S cluster
 
 Happy editing helm values.yaml ! I’d like to pull the helm charts to keep and track versioning in a git repository.
 
@@ -153,6 +153,8 @@ base64 -w 0 /opt/node_exporter/configs/node_exporter.crt
 # wrap encoded lines after COLS character (default 76). Use 0 to disable line wrapping
 ```
 
+## Secret of the Certificate
+
 Create Secret, it has to be in the same namespace as the Prometheus namespace.
 
 ```yaml
@@ -172,7 +174,7 @@ Apply the Secret
 kubectl apply -f node01-node-exporter-secret.yaml -n prometheus
 ```
 
-**Add the Secret**
+## Include the Secret
 
 include secret with `prometheus.psometheusSpec.secret` in `values.yaml` ; As the comment says secrets will be mounted in `/etc/prometheus/secrets` .
 
@@ -191,7 +193,7 @@ prometheus:
       - node01-node-exporter-crt
 ```
 
-**Add `additionalScrapeConfigs`**
+## Add `additionalScrapeConfigs`
 
 include `external-nodes` job with `additionalScrapeConfigs` in `values.yaml` , the `scheme` has to be `https` , set the `tls_config` and `basic_auth`.
 
@@ -232,7 +234,66 @@ Apply changes with `helm upgrade`
 helm upgrade --install prometheus-stack . -n prometheus --values values.yaml
 ```
 
-It could be done with `iptables` or `firewalls` to allow trusted IPs to scrape the node on the `9100` port. I’d prefer to have security more than that, actually utilizing both Encryption/Authentication alongside the `iptables` rule is the best practice.
+## The `scrapeconfigs.monitoring.coreos.com` CRD
+
+Instead of doing the below steps you can create a `ScrapeConfig` resource and avoid to have many changes in `values.yaml`.
+
+- [Secret of the Certificate][1]
+- [Include the Secret][2]
+- [Add `additionalScrapeConfigs`][3]
+
+The `Secret` can contain many keys to use in the `ScrapeConfig`.
+
+```yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: external-nodes-secrets
+  namespace: prometheus
+type: Opaque
+data:
+  node01.node_exporter.crt: "<base64-encoded-cert>"
+  # # the user you set in the node-exporter in the node
+  node01-basicauth-username: "<base64-encoded-username>"
+  # # the password you set in the node-exporter in the node
+  node01-basicauth-password: "<base64-encoded-password>"
+
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  namespace: prometheus
+  name: external-nodes-scfg
+  labels:
+    release: prometheus-stack
+spec:
+  jobName: external-nodes
+  scheme: HTTPS
+  tlsConfig:
+    ca:
+      secret:
+        name: external-nodes-secrets
+        key: node01.node_exporter.crt
+    insecureSkipVerify: true
+  basicAuth:
+    username:
+      name: external-nodes-secrets
+      key: node01-basicauth-username
+    password:
+      name: external-nodes-secrets
+      key: node01-basicauth-password
+  staticConfigs:
+    - targets:
+        - "<Remote-HOST-IP>:9100"
+      labels:
+        instance: "node01"
+
+```
+
+## Firewall or `iptables`
+
+Utilizing both Encryption/Authentication alongside the `iptables` rule is the best practice. It could be done with `iptables` or `firewalls` to allow trusted IPs to scrape the node on the `9100` port.
 
 I assume the egress IP of the Kubernetes cluster is a single IP, otherwise, the IP range should be allowed via iptables .
 
@@ -244,3 +305,8 @@ iptables -A INPUT -p tcp -d <HOST-IP> --dport 9100 -s <K8S-Egress-IP> -m state -
 # Instead of DROP, it's better to use REJECT, it sends a response back to the source IP, informing it that the connection is rejected. DROP would silently discard the packets without notifying the source.
 iptables -A INPUT -p tcp --dport 9100 -m state --state NEW,ESTABLISHED -m comment --comment "Reject all other traffic to 9100 port " -j REJECT
 ```
+
+[1]: #secret-of-the-certificate
+[2]: #include-the-secret
+[3]: #add-additionalscrapeconfigs
+[4]: https://github.com/prometheus/node_exporter/blob/master/Dockerfile#L11

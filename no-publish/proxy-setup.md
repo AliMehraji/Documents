@@ -76,7 +76,7 @@ Set proxies in git global configs or it can be local with no `--global` flag
 ### Debian OS Family
 
 - `apt` (`Debina`/`Ubuntu`) edit/create the `/etc/apt/apt.conf.d/proxy` file and add:
-  
+
   ```conf
   Acquire::http::Proxy "socks5h://<Proxy-Server-IP>:<Proxy-Port>";
   ```
@@ -88,7 +88,7 @@ Set proxies in git global configs or it can be local with no `--global` flag
 For Running [Discord](https://discord.com/) through a Proxy Server :
 
 - Edit `/usr/share/applications/discord.desktop` file and add `--proxy-server="socks5://<Proxy-Server-IP>:<Proxy-Port>"` in it where the `Exec` binary is specified :
-  
+
   ```conf
   [Desktop Entry]
    Name=Discord
@@ -102,7 +102,7 @@ For Running [Discord](https://discord.com/) through a Proxy Server :
    Path=/usr/bin
    X-Desktop-File-Install-Version=0.26
   ```
-  
+
   Notice:
   > The Desktop config file may be different in your Linux Distro try: </br>
   > `sudo find / -iname "discord.desktop"` </br>
@@ -162,7 +162,7 @@ StartupNotify=false
 
 ```
 
-## [PProxy](https://pypi.org/project/pproxy/) 
+## [PProxy](https://pypi.org/project/pproxy/)
 
 Convert a `socks5` to `http` proxy
 

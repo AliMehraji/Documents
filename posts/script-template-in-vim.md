@@ -11,8 +11,6 @@ date: '2025-03-08T23:05:25Z'
 
 ## Have you ever tried creating `Bash`/`Python` or other Script templates with Vim?
 
-
-
 Every time I wrote Bash or Python scripts in Vim, I had to add the Shebang `#! /bin/bash` or `#! /usr/bin/python` in the scripts manually.
 
 So how can we automate this process with Vim to catch `*.sh` or `*.py` extensions and create a new file with our desired template, Let’s go for it :
