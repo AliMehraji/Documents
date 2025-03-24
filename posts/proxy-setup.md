@@ -2,7 +2,7 @@
 title: Setup Proxy for Services and Applications in Linux
 published: true
 description: Setup Proxy for applications or services in linux such as Docker, Podman, or Discord, Dropbox.
-tags: 'linux,proxy,socks5,docker,podman'
+tags: 'linux,docker,podman'
 canonical_url: null
 
 ---
@@ -116,7 +116,7 @@ For Running [Discord](https://discord.com/) through a Proxy Server :
   > That file will be overwritten when Discord updated. </br>
   > Try to not install Discord via Snap or Flatpak , I recommend To install it via package-manager or its source.
 
-### Vscode
+## Vscode
 
 vscode desktop config file is `/usr/share/applications/code.desktop` :
 
@@ -148,7 +148,7 @@ Recommendation
 >
 > with that , the proxy will apply in both way you run vscode , either `code .` in a directory or running it in your desktop via desktop icon.
 
-### Dropbox
+## Dropbox
 
 vscode desktop config file is `/usr/share/applications/dropbox.desktop`:
 
@@ -181,7 +181,7 @@ pip3 install pproxy
 pproxy -l http://0.0.0.0:8080 -r socks5://<Proxy-Host-IP>:<Port> -v > $PWD/pproxy.log &
 ```
 
-### Links
+## Links
 
 - [Freedom of Developers](https://github.com/freedomofdevelopers/fod)
 - [Proxychains-ng](https://github.com/rofl0r/proxychains-ng)
