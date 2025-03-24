@@ -21,7 +21,7 @@ _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster u
    2. with the `ScrapeConfig` Resource.
 3. Setup Firewall or `iptables` to allow trusted IPs.
 
-</br>
+</br></br></br>
 
 ## Node Exporter Configuration
 
