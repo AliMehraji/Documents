@@ -21,7 +21,7 @@ _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster u
    2. with the `ScrapeConfig` Resource.
 3. Setup Firewall or `iptables` to allow trusted IPs.
 
-</br></br></br>
+---
 
 ## Node Exporter Configuration
 
@@ -133,7 +133,7 @@ node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:34
 node-exporter | time=2025-03-02T22:18:16.474Z level=INFO source=tls_config.go:383 msg="TLS is enabled." http2=true address=[::]:9100
 ```
 
-</br></br>
+---
 
 ## Prometheus Configuration
 
@@ -303,6 +303,8 @@ spec:
         instance: "node01"
 
 ```
+
+---
 
 ## Firewall or `iptables`
 
