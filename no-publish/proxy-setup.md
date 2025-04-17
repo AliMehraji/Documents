@@ -162,6 +162,28 @@ StartupNotify=false
 
 ```
 
+## Google Chrome
+
+If you don't want use Proxy Extensions like [`FoxyProxy`][foxyproxy] or [`Switchy Omega`][switchyomega], Add below cli flag to the `Exec` in `google-chrome` Desktop Entry `/usr/share/applications/google-chrome.desktop` to use proxy server.
+
+```bash
+--proxy-server="socks5://127.0.0.1:10808"
+```
+
+Help
+
+```bash
+/usr/bin/google-chrome-stable --help
+```
+
+Notice
+> Also I Use an Extension named [Vytal][vytal] which spoofs Location,TimeZone and etc , to disable debug notification in chrome set below cli flag
+
+```bash
+--silent-debugger-extension-api
+```
+
+
 ## [PProxy](https://pypi.org/project/pproxy/)
 
 Convert a `socks5` to `http` proxy
@@ -178,3 +200,7 @@ pproxy -l http://0.0.0.0:8080 -r socks5://<Proxy-Host-IP>:<Port> -v > $PWD/pprox
 
 - [Freedom of Developers](https://github.com/freedomofdevelopers/fod)
 - [Proxychains-ng](https://github.com/rofl0r/proxychains-ng)
+
+[vytal]: https://chromewebstore.google.com/detail/vytal-spoof-timezone-geol/ncbknoohfjmcfneopnfkapmkblaenokb
+[foxyproxy]: https://chromewebstore.google.com/detail/gcknhkkoolaabfmlnjonogaaifnjlfnp
+[switchyomega]: https://chromewebstore.google.com/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif
