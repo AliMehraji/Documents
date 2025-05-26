@@ -11,7 +11,7 @@ There Was a need to reduce a python application docker image size, also had to h
 
 Lets get to the Optimization Line by Line.
 
-### Docker `buildx` `syntax`
+## Docker build `buildx` `syntax`
 
 - First of all make sure docker uses the `docker buildx` as its default `docker build`.
 
@@ -29,7 +29,7 @@ DOCKER_BUILDKIT=1 docker build --file /path/to/dockerfile -t docker_image_name:t
 # syntax=docker/dockerfile:1.4 # Required for heredocs [3, 4]
 ```
 
-### Project Directory Tree
+## Project Directory Tree
 
 ```tree
 ├── main.py
@@ -39,11 +39,11 @@ DOCKER_BUILDKIT=1 docker build --file /path/to/dockerfile -t docker_image_name:t
     └── prometheus.py
 ```
 
-### Multistage Dockerfile
+## Multistage Dockerfile
 
 as mentioned before, at first provisioning the `base` stage to be used in the next `build` and `runtime` stages.
 
-#### `base` stage
+### `base` stage
 
 - base image
 
@@ -70,11 +70,11 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_INDEX_URL=https://${JFROG}/artifactory/api/pypi/python/simple/
 ```
 
-  - [`PYTHONUNBUFFERED`][python-unbuffered]
-  - [`PYTHONDONTWRITEBYTECODE`][python-dont-write-bytecode]
-  - [`PIP_DISABLE_PIP_VERSION_CHECK`][]: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
-  - [`PIP_INDEX_URL`][pip_install]: sets the custom index url for pip globally to download and install.
-  - If the structure of the PYPI repo is different in a private repo , please change the value of `PIP_INDEX_URL`.
+- [`PYTHONUNBUFFERED`][python-unbuffered]
+- [`PYTHONDONTWRITEBYTECODE`][python-dont-write-bytecode]
+- [`PIP_DISABLE_PIP_VERSION_CHECK`][]: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
+- [`PIP_INDEX_URL`][pip_install]: sets the custom index url for pip globally to download and install.
+- If the structure of the PYPI repo is different in a private repo , please change the value of `PIP_INDEX_URL`.
 
 - Private Debian Repository (Offline Installation)
 
@@ -102,7 +102,7 @@ Components: main
 Trusted: true
 SOURCE_FILE_CONTENT
 EOF
-   ```
+```
 
 - Install Shared and common packages in all stages
 
@@ -118,7 +118,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-#### `build` stage
+### `build` stage
 
 - Use the prepared `base` image as `build` image
 
@@ -153,15 +153,15 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 pip --timeout 100 install --no-cache-dir -r requirements.txt
 ```
 
-#### `runtime` stage
+### `runtime` stage
 
 - Use the prepared `base` image as `build` image
 
-    ```docker
-    FROM base AS build
+```docker
+FROM base AS build
 
-    WORKDIR /app
-    ```
+WORKDIR /app
+```
 
 - Security best practices
 
@@ -200,9 +200,9 @@ COPY --chown=nonroot:nonroot main.py .
 CMD ["python", "/app/main.py"]
 ```
 
-### Before/After The optimization
+## Before/After The optimization
 
-#### Before The Optimization
+### Before The Optimization
 
 The Dockerfile was the below one , after build its size was `1.02GB`.
 
@@ -218,7 +218,7 @@ RUN pip config set global.index-url https://jfrog.example.com/artifactory/api/py
 CMD ["python","-u","main.py"]
 ```
 
-#### Final Dockerfile After Optimization
+### Final Dockerfile After Optimization
 
 After all Optimization and multistage Dockerfile its size reduced to `242MB`.
 
