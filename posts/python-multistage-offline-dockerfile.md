@@ -1,8 +1,10 @@
 ---
-title: Offline, Multistage Python Dockerfile
+title: 'Offline, Multistage Python Dockerfile'
 published: true
 description: Multistage and Offline Installation Dockerfile for Python
 tags: 'docker,python,devops,debian'
+id: 2530646
+date: '2025-05-26T21:00:16Z'
 ---
 
 
