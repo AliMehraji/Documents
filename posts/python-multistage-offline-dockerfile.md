@@ -82,6 +82,8 @@ ENV PYTHONUNBUFFERED=1 \
    Used [`heredoc`][heredoc-dockerfile] in Docker to change the base image apt sources to update and install packages from private Debian repository. heredoc needs the [dockerfile syntax][custom-dockerfile-syntax] mentioned before.</br>
    If the structure of the Debian repo is different in a private repo , please change the `URIs`.
 
+[DEB822 format (apt .sources files)][deb822-style-format]
+
 ```docker
 # Using DEB822 format (.sources files) - for newer systems
 RUN <<EOF
@@ -105,10 +107,10 @@ SOURCE_FILE_CONTENT
 EOF
 ```
 
-- Install Shared and common packages in all stages
+- Install Shared and common packages in all stages.
 
-   1. in the package installation there is no need to install recommended packages, this reduces the image size
-   2. after installation, for the sake of size image there is need to remove packages downloads. </br></br>
+  - In the package installation there is no need to install recommended packages to reduces the image size.
+  - After installation, for the sake of size image there is need to remove packages downloads. </br></br>
 
 ```docker
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -138,7 +140,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 - Install requirements
 
   - Change directory to `app`.
-  - Create virtualenv, in the `runtime` stage [copy the `virtualenv`][copy-virtual-env]
+  - Create virtualenv, in the `runtime` stage, [the `virtualenv` will be copied ][copy-virtual-env] in image.
   - use the [cache mount][cache-mount] for faster build.
   - For the sake of image size install requirements with [disabling pip cache][disabling-caching] with `--no-cache-dir` flag. </br></br>
 
@@ -179,7 +181,7 @@ USER nonroot:nonroot
 - VirtualEnv
 
   - Add the `/app/.venv/bin` into `PATH`.
-  - Copy the [`virtualenv`][copy-virtual-env]. </br></br>
+  - [Copy the `virtualenv`][copy-virtual-env]. </br></br>
 
 ```docker
 ENV VIRTUAL_ENV=/app/.venv \
@@ -188,24 +190,28 @@ ENV VIRTUAL_ENV=/app/.venv \
 COPY --from=build --chown=nonroot:nonroot /app/.venv /app/.venv
 ```
 
-- Copy the `src`
+- Copy `src` directory.
 
 ```docker
 COPY --chown=nonroot:nonroot src /app/src
 COPY --chown=nonroot:nonroot main.py .
 ```
 
-- `CMD` to run container from image
+- `CMD` to run container from image.
 
 ```docker
 CMD ["python", "/app/main.py"]
 ```
 
-## Before/After The optimization
+## Before And After The optimization
+
+</br></br>
 
 ### Before The Optimization
 
-The Dockerfile was the below one , after build its size was `1.02GB`.
+</br></br>
+
+The Dockerfile was:
 
 ```docker
 FROM jfrog.example.com/docker/python:latest
@@ -219,7 +225,11 @@ RUN pip config set global.index-url https://jfrog.example.com/artifactory/api/py
 CMD ["python","-u","main.py"]
 ```
 
+After build its size was `1.02GB`.
+
 ### Final Dockerfile After Optimization
+
+</br></br>
 
 After all Optimization and multistage Dockerfile its size reduced to `242MB`.
 
@@ -303,10 +313,10 @@ CMD ["python", "/app/main.py"]
 
 ## Resources
 
-- [Heredoc in Dockerfile][heredoc-dockerfile]
-- [Dockerfile Reference][dockerfile-reference]
-- [Custom Dockerfile Syntax][custom-dockerfile-syntax]
 - [Dockerize Python Application][dockerize-python-application]
+- [Dockerfile Reference][dockerfile-reference]
+- [Heredoc in Dockerfile][heredoc-dockerfile]
+- [Custom Dockerfile Syntax][custom-dockerfile-syntax]
 - [Deb822-style Format][deb822-style-format]
 - [Docker build Concepts][docker-build-concepts]
 - [Python cmdline & environments][command-line-and-environment]
