@@ -7,24 +7,27 @@ id: 2530646
 date: '2025-05-26T21:00:16Z'
 ---
 
+There Was a need to reduce a python application docker image size, also had to have offline installation either in the PYPI packages installation or in APT update and installation packages.
+
+Lets get to the Optimization Line by Line.
 
 ### Docker `buildx` `syntax`
 
 - First of all make sure docker uses the `docker buildx` as its default `docker build`.
 
-    [BuildKit][docker-buildkit-getting-start]
+[BuildKit][docker-buildkit-getting-start]
 
-    > If you have installed Docker Desktop, you don't need to enable BuildKit. If you are running a version of Docker Engine version earlier than 23.0, you can enable BuildKit either by setting an environment variable, or by making BuildKit the default setting in the daemon configuration.
+> If you have installed Docker Desktop, you don't need to enable BuildKit. If you are running a version of Docker Engine version earlier than 23.0, you can enable BuildKit either by setting an environment variable, or by making BuildKit the default setting in the daemon configuration.
 
-    ```bash
-    DOCKER_BUILDKIT=1 docker build --file /path/to/dockerfile -t docker_image_name:tag
-    ```
+```bash
+DOCKER_BUILDKIT=1 docker build --file /path/to/dockerfile -t docker_image_name:tag
+```
 
 - `# syntax=docker/dockerfile:1.4` for the [heredoc in Dockerfile][heredoc-dockerfile].
   
-  ```docker
-  # syntax=docker/dockerfile:1.4 # Required for heredocs [3, 4]
-  ```
+```docker
+# syntax=docker/dockerfile:1.4 # Required for heredocs [3, 4]
+```
 
 ### Project Directory Tree
 
@@ -42,117 +45,117 @@ as mentioned before, at first provisioning the `base` stage to be used in the ne
 
 #### `base` stage
 
-1. base image
+- base image
 
-   ```docker
-    ARG JFROG=jfrog.example.com
+```docker
+ARG JFROG=jfrog.example.com
 
-    FROM ${JFROG}/docker/python:3.13-slim AS base
-   ```
+FROM ${JFROG}/docker/python:3.13-slim AS base
+```
 
-2. Change the default SHELL
+- Change the default SHELL
 
-   ```docker
-   SHELL ["/bin/bash", "-c", "-o", "pipefail", "-o", "errexit"]
-   ```
+```docker
+SHELL ["/bin/bash", "-c", "-o", "pipefail", "-o", "errexit"]
+```
 
-3. Environments
+- Environments
 
-   ```docker
-    ARG JFROG=jfrog.example.com
+```docker
+ARG JFROG=jfrog.example.com
 
-    ENV PYTHONUNBUFFERED=1 \
-        PYTHONDONTWRITEBYTECODE=1 \
-        PIP_DISABLE_PIP_VERSION_CHECK=on \
-        PIP_INDEX_URL=https://${JFROG}/artifactory/api/pypi/python/simple/
-   ```
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_INDEX_URL=https://${JFROG}/artifactory/api/pypi/python/simple/
+```
 
-   - [PYTHONUNBUFFERED][python-unbuffered]
-   - [PYTHONDONTWRITEBYTECODE][python-dont-write-bytecode]
-   - `PIP_DISABLE_PIP_VERSION_CHECK`: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
-   - [PIP_INDEX_URL][pip_install]: sets the custom index url for pip globally to download and install.
-     - If the structure of the PYPI repo is different in a private repo , please change the value of `PIP_INDEX_URL`.
+  - [`PYTHONUNBUFFERED`][python-unbuffered]
+  - [`PYTHONDONTWRITEBYTECODE`][python-dont-write-bytecode]
+  - [`PIP_DISABLE_PIP_VERSION_CHECK`][]: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
+  - [`PIP_INDEX_URL`][pip_install]: sets the custom index url for pip globally to download and install.
+  - If the structure of the PYPI repo is different in a private repo , please change the value of `PIP_INDEX_URL`.
 
-4. Private Debian Repository (Offline Installation)
+- Private Debian Repository (Offline Installation)
 
-   [`heredoc` in Docker][heredoc-dockerfile] to change the base image apt sources to update and install packages from private Debian repository. heredoc needs the [dockerfile syntax][custom-dockerfile-syntax] mentioned before.</br>
+   Used [`heredoc`][heredoc-dockerfile] in Docker to change the base image apt sources to update and install packages from private Debian repository. heredoc needs the [dockerfile syntax][custom-dockerfile-syntax] mentioned before.</br>
    If the structure of the Debian repo is different in a private repo , please change the `URIs`.
 
-   ```docker
-    # Using DEB822 format (.sources files) - for newer systems
-    RUN <<EOF
+```docker
+# Using DEB822 format (.sources files) - for newer systems
+RUN <<EOF
 
-    CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)
-    DISTRO=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
+CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)
+DISTRO=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 
-    cat > /etc/apt/sources.list.d/debian.sources <<SOURCE_FILE_CONTENT
-    Types: deb
-    URIs: https://${JFROG}/artifactory/debian/debian/
-    Suites: ${CODENAME} ${CODENAME}-updates
-    Components: main
-    Trusted: true
+cat > /etc/apt/sources.list.d/debian.sources <<SOURCE_FILE_CONTENT
+Types: deb
+URIs: https://${JFROG}/artifactory/debian/debian/
+Suites: ${CODENAME} ${CODENAME}-updates
+Components: main
+Trusted: true
 
-    Types: deb
-    URIs: https://${JFROG}/artifactory/debian/debian-security/
-    Suites: ${CODENAME}-security
-    Components: main
-    Trusted: true
-    SOURCE_FILE_CONTENT
-    EOF
+Types: deb
+URIs: https://${JFROG}/artifactory/debian/debian-security/
+Suites: ${CODENAME}-security
+Components: main
+Trusted: true
+SOURCE_FILE_CONTENT
+EOF
    ```
 
-5. Install Shared and common packages in all stages
+- Install Shared and common packages in all stages
 
    1. in the package installation there is no need to install recommended packages, this reduces the image size
    2. after installation, for the sake of size image there is need to remove packages downloads. </br></br>
 
-    ```docker
-    RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        gnupg \
-        lsb-release \
-        && rm -rf /var/lib/apt/lists/*
-    ```
+```docker
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+```
 
 #### `build` stage
 
-1. Use the prepared `base` image as `build` image
+- Use the prepared `base` image as `build` image
 
-    ```docker
-    FROM base AS build
-    ```
+```docker
+FROM base AS build
+```
 
-2. There was no need for build specific packages in all stages, so just install them in `build` stage.
+- There was no need for build specific packages in all stages, so just install them in `build` stage.
 
-    ```docker
-    RUN apt-get update && apt-get install -y --no-install-recommends \
-        build-essential && \
-        rm -rf /var/lib/apt/lists/*
-    ```
+```docker
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential && \
+    rm -rf /var/lib/apt/lists/*
+```
 
-3. Install requirements
+- Install requirements
 
-   - Change directory to `app`.
-   - Create virtualenv, in the `runtime` stage [copy the `virtualenv`][copy-virtual-env]
-   - use the [cache mount][cache-mount] for faster build.
-   - For the sake of image size install requirements with [disabling pip cache][disabling-caching] with `--no-cache-dir` flag. </br></br>
+  - Change directory to `app`.
+  - Create virtualenv, in the `runtime` stage [copy the `virtualenv`][copy-virtual-env]
+  - use the [cache mount][cache-mount] for faster build.
+  - For the sake of image size install requirements with [disabling pip cache][disabling-caching] with `--no-cache-dir` flag. </br></br>
 
-   ```docker
-    WORKDIR /app
+```docker
+WORKDIR /app
 
-    RUN python -m venv .venv
-    ENV PATH="/app/.venv/bin:$PATH"
+RUN python -m venv .venv
+ENV PATH="/app/.venv/bin:$PATH"
 
-    COPY requirements.txt .
+COPY requirements.txt .
 
-    RUN --mount=type=cache,target=/root/.cache/pip \
-    pip --timeout 100 install --no-cache-dir -r requirements.txt
-   ```
+RUN --mount=type=cache,target=/root/.cache/pip \
+pip --timeout 100 install --no-cache-dir -r requirements.txt
+```
 
 #### `runtime` stage
 
-1. Use the prepared `base` image as `build` image
+- Use the prepared `base` image as `build` image
 
     ```docker
     FROM base AS build
@@ -160,42 +163,42 @@ as mentioned before, at first provisioning the `base` stage to be used in the ne
     WORKDIR /app
     ```
 
-2. Security best practices
+- Security best practices
 
-   - Create `group` and `user` to leverage the kubernetes `runAsUser`, `runAsGroup` and `fsGroup` [`securityContext`][pod-security-context] </br></br>
+  - Create `group` and `user` to leverage the kubernetes `runAsUser`, `runAsGroup` and `fsGroup` [`securityContext`][pod-security-context] </br></br>
 
-    ```docker
-    RUN addgroup --gid 1001 --system nonroot && \
-        adduser --no-create-home --shell /bin/false \
-        --disabled-password --uid 1001 --system --group nonroot
+```docker
+RUN addgroup --gid 1001 --system nonroot && \
+    adduser --no-create-home --shell /bin/false \
+    --disabled-password --uid 1001 --system --group nonroot
 
-    USER nonroot:nonroot
-    ```
+USER nonroot:nonroot
+```
 
-3. VirtualEnv
+- VirtualEnv
 
-   - Add the `/app/.venv/bin` into `PATH`.
-   - Copy the [`virtualenv`][copy-virtual-env]. </br></br>
+  - Add the `/app/.venv/bin` into `PATH`.
+  - Copy the [`virtualenv`][copy-virtual-env]. </br></br>
 
-   ```docker
-    ENV VIRTUAL_ENV=/app/.venv \
-        PATH="/app/.venv/bin:$PATH"
+```docker
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
 
-    COPY --from=build --chown=nonroot:nonroot /app/.venv /app/.venv
-   ```
+COPY --from=build --chown=nonroot:nonroot /app/.venv /app/.venv
+```
 
-4. Copy the `src`
+- Copy the `src`
 
-   ```docker
-    COPY --chown=nonroot:nonroot src /app/src
-    COPY --chown=nonroot:nonroot main.py .
-   ```
+```docker
+COPY --chown=nonroot:nonroot src /app/src
+COPY --chown=nonroot:nonroot main.py .
+```
 
-5. `CMD` to run container from image
+- `CMD` to run container from image
 
-    ```docker
-    CMD ["python", "/app/main.py"]
-    ```
+```docker
+CMD ["python", "/app/main.py"]
+```
 
 ### Before/After The optimization
 
