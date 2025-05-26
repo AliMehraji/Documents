@@ -54,6 +54,7 @@ FROM ${JFROG}/docker/python:3.13-slim AS base
 ```
 
 - Change the default SHELL
+  - A safe way with custom shell with `pipefail` and `errexit` options, its very useful in the Heredoc in the Debian Private repo setup section.
 
 ```docker
 SHELL ["/bin/bash", "-c", "-o", "pipefail", "-o", "errexit"]
