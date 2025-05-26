@@ -73,7 +73,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 - [`PYTHONUNBUFFERED`][python-unbuffered]
 - [`PYTHONDONTWRITEBYTECODE`][python-dont-write-bytecode]
-- [`PIP_DISABLE_PIP_VERSION_CHECK`][]: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
+- `PIP_DISABLE_PIP_VERSION_CHECK`: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
 - [`PIP_INDEX_URL`][pip_install]: sets the custom index url for pip globally to download and install.
 - If the structure of the PYPI repo is different in a private repo , please change the value of `PIP_INDEX_URL`.
 
