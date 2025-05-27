@@ -181,7 +181,7 @@ USER nonroot:nonroot
 - VirtualEnv
 
   - Add the `/app/.venv/bin` into `PATH`.
-  - [Copy the `virtualenv`][copy-virtual-env]. </br></br>
+  - [Copy the `virtualenv`][copy-virtual-env] from build stage. </br></br>
 
 ```docker
 ENV VIRTUAL_ENV=/app/.venv \
