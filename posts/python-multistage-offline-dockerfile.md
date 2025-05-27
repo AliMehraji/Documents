@@ -7,7 +7,7 @@ id: 2530646
 date: '2025-05-26T21:00:16Z'
 ---
 
-There Was a need to reduce a python application docker image size, also had to have offline installation either in the PYPI packages installation or in APT update and installation packages.
+There Was a need to reduce a python application docker image size, also had to have offline installation either in the PYPI packages installation or in APT update and installing packages.
 
 Lets get to the Optimization Line by Line.
 
