@@ -32,7 +32,7 @@ Execute it like below and give the script some arguments:
 
 ```bash
 $ ./Diff.sh "Jhon Smith" "Marry Ann"
-$ First Parameter is Jhon
+First Parameter is Jhon
 
 ```
 
@@ -53,7 +53,7 @@ The result will be :
 
 ```bash
 $ ./Diff.sh "Jhon Smith" "Marry Ann"
-$ First Parameter is Jhon
+First Parameter is Jhon
 ```
 
 Far Now There is no difference, maybe those people were right!
@@ -73,7 +73,7 @@ MAIN "$@"
 
 ```bash
 $ ./Diff.sh "Jhon Smith" "Marry Ann"
-$ First Parameter is Jhon Smith
+First Parameter is Jhon Smith
 ```
 
 The second one in double quotes `"$*"` :
@@ -91,7 +91,7 @@ MAIN "$*"
 
 ```bash
 $ ./Diff.sh "Jhon Smith" "Marry Ann"
-$ First Parameter is Jhon Smith Marry Ann
+First Parameter is Jhon Smith Marry Ann
 ```
 
 So be careful when you use double quotes and tell those people there is a difference, explain to them shell is sensitive to double quotes.

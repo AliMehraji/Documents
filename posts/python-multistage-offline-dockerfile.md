@@ -140,7 +140,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 - Install requirements
 
   - Change directory to `app`.
-  - Create virtualenv, in the `runtime` stage, [the `virtualenv` will be copied ][copy-virtual-env] in image.
+  - Create virtualenv, in the `runtime` stage, [the `virtualenv` will be copied][copy-virtual-env] in image.
   - use the [cache mount][cache-mount] for faster build.
   - For the sake of image size install requirements with [disabling pip cache][disabling-caching] with `--no-cache-dir` flag. </br></br>
 

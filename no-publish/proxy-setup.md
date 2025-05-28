@@ -5,9 +5,9 @@
 - [Docker-CLI Proxy Config](https://docs.docker.com/engine/cli/proxy/)
 - [Docker Daemon Proxy Config](https://docs.docker.com/engine/daemon/proxy/)
 
-1. `mkdir -p /etc/systemd/system/docker.service.d`
+- `mkdir -p /etc/systemd/system/docker.service.d`
 
-2. `vi /etc/systemd/system/docker.service.d/http-proxy.conf` and add below to `http-proxy.conf`
+- `vi /etc/systemd/system/docker.service.d/http-proxy.conf` and add below to `http-proxy.conf`
 
     **Http Proxy**
 
@@ -25,24 +25,24 @@
     Environment="HTTPS_PROXY=socks5://<Proxy-Server-IP>:<Proxy-Port>"
     ```
 
-3. `systemctl daemon-reload`
-4. `systemctl restart docker`
+- `systemctl daemon-reload`
+- `systemctl restart docker`
 
 ## [Podman](https://podman-desktop.io/docs/proxy#using-a-proxy)
 
-1. Add/Edit File Which Related To Podman Engine
+Add/Edit File Which Related To Podman Engine
 
-   - `rootless`: `$HOME/.config/containers/containers.conf`
-   - `rootful`: `/etc/containers/containers.conf`
+- `rootless`: `$HOME/.config/containers/containers.conf`
+- `rootful`: `/etc/containers/containers.conf`
 
-2. Set the proxy environment variables to pass into the Podman engine:
+Set the proxy environment variables to pass into the Podman engine:
 
    ```conf
    [engine]
    env = ["http_proxy=<your.proxy.tld:port>", "https_proxy=<your.proxy.tld:port>"]
    ```
 
-3. Restart all podman processes.
+Restart all podman processes.
 
    ```bash
    pkill podman
@@ -182,7 +182,6 @@ Notice
 ```bash
 --silent-debugger-extension-api
 ```
-
 
 ## [PProxy](https://pypi.org/project/pproxy/)
 

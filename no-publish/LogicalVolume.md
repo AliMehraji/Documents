@@ -96,8 +96,6 @@ Add to `fstab`, edit fstab file with `vim /etc/fstab` and append below to the fi
 /dev/vg-k8s-storage/lv-k8s-storage /srv/data.vol ext4    defaults      0 2
 ```
 
-***Notic***
-
 [Man `fstab`][man-fstab]
 
 ```txt
@@ -122,6 +120,5 @@ After the editing file you need to invoke `mount --all --verbose` to mount all f
 -a, --all               mount all filesystems mentioned in fstab
 -v, --verbose           say what is being done
 ```
-
 
 [man-fstab]: https://man7.org/linux/man-pages/man5/fstab.5.html

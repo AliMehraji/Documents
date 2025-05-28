@@ -1,6 +1,4 @@
-# Enforce the style guide at https://github.com/markdownlint/markdownlint/blob/main/docs/configuration.md
-
-all
-rule 'MD013', :line_length => 500
-exclude_rule 'MD007'
+style '.mdl_style.rb'
 git_recurse true
+ignore_code_blocks true
+ignore_front_matter true

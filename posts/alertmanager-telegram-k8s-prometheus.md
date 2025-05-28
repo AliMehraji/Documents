@@ -11,9 +11,8 @@ date: '2025-03-09T12:06:12Z'
 
 ### [How to create a Telegram bot][1]
 
-1. To create a Telegram bot, you'll need to have the Telegram app installed on your computer. If you don't have it already, you can download it from the Telegram website.
-
-2. Connect to BotFather and hit the `/newbot` and follow the instruction
+- To create a Telegram bot, you'll need to have the Telegram app installed on your computer. If you don't have it already, you can download it from the Telegram website.
+- Connect to BotFather and hit the `/newbot` and follow the instruction
 
     BotFather is a bot created by Telegram that allows you to create and manage your own bots. To connect to BotFather, search for "@BotFather" in the Telegram app and click on the result to start a conversation.
 

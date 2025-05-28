@@ -13,13 +13,17 @@ _There’s a need to scrape metrics from nodes outside of a Kubernetes cluster u
 
 ## Steps to Secure and Scrape Node Exporter Metrics
 
-1. Node Exporter Configuration for Secure Metrics Exposure.
-   1. Encryption: Generating and Implementing SSL/TLS Certificates.
-   2. Authentication: Setting Up Basic Authentication for Secure Access.
-2. Prometheus Configuration to Scrape Metrics from External Nodes in Kubernetes
-   1. with `Helm` `values.yaml`.
-   2. with the `ScrapeConfig` Resource.
-3. Setup Firewall or `iptables` to allow trusted IPs.
+Node Exporter Configuration for Secure Metrics Exposure.
+
+- Encryption: Generating and Implementing SSL/TLS Certificates.
+- Authentication: Setting Up Basic Authentication for Secure Access.
+
+Prometheus Configuration to Scrape Metrics from External Nodes in Kubernetes
+
+- with `Helm` `values.yaml`.
+- with the `ScrapeConfig` Resource.
+
+Setup Firewall or `iptables` to allow trusted IPs.
 
 ---
 

@@ -24,6 +24,6 @@ repos:
     hooks:
       - id: markdownlint
         files: \.(md|mdown|markdown)$
-        args: ["-r", "~MD007,~MD013"]
+        args: ["-c", "./.mdlrc"]
 
 ...
