@@ -116,7 +116,7 @@ The sixth field (fs_passno).
     present.
 ```
 
-After the editing file you need to mount it via `mount --all --verbose` to mount all filesystems mentioned in fstab.
+After the editing file you need to invoke `mount --all --verbose` to mount all filesystems mentioned in fstab.
 
 ```txt
 -a, --all               mount all filesystems mentioned in fstab
@@ -125,4 +125,3 @@ After the editing file you need to mount it via `mount --all --verbose` to mount
 
 
 [man-fstab]: https://man7.org/linux/man-pages/man5/fstab.5.html
-

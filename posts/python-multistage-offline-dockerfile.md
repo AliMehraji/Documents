@@ -24,7 +24,7 @@ DOCKER_BUILDKIT=1 docker build --file /path/to/dockerfile -t docker_image_name:t
 ```
 
 - `# syntax=docker/dockerfile:1.4` for the [heredoc in Dockerfile][heredoc-dockerfile].
-  
+
 ```docker
 # syntax=docker/dockerfile:1.4 # Required for heredocs [3, 4]
 ```
@@ -221,7 +221,7 @@ ADD src/ .
 
 RUN pip config set global.index-url https://jfrog.example.com/artifactory/api/pypi/python/simple/ &&  \
     pip --timeout 100 install -r requirements.txt
-    
+
 CMD ["python","-u","main.py"]
 ```
 
