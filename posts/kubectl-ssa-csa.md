@@ -14,7 +14,7 @@ The need to read and dig into the SSA and CSA came from [command Annotation in I
 
 ## [Field management][field-mngmnt]
 
-</br>
+</br></br>
 
 > The Kubernetes API server tracks managed fields for all newly created objects. When trying to apply an object, fields that have a different value and are owned by another manager will result in a conflict. This is done in order to signal that the operation might undo another collaborator's changes. Writes to objects with managed fields can be forced, in which case the value of any conflicted field will be overridden, and the ownership will be transferred.
 >
