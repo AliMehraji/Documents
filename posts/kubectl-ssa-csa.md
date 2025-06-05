@@ -4,6 +4,8 @@ published: true
 description: digging the server side apply and client side apply
 tags: 'kubernetes,devops,k8s'
 cover_image: ./assets/kubectl-ssa-csa.webp
+id: 2566618
+date: '2025-06-05T14:39:43Z'
 ---
 
 Kubectl CSA(Client Side Apply) and SSA(Server Side Apply).
