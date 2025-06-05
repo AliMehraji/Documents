@@ -266,6 +266,21 @@ As you can see, the manager(owner) of the `podIP` and `podIPs` fields changed to
 
 ```
 
+## Usage in Tools
+
+### ArgoCD
+
+> This option enables Kubernetes [Server-Side Apply[server-side-apply]].
+>
+> By default, Argo CD executes kubectl apply operation to apply the configuration stored in Git. This is a client side operation that relies on kubectl.kubernetes.io/last-applied-configuration annotation to store the previous resource state.
+
+However, there are some cases where you want to use kubectl apply `--server-side` over kubectl apply:
+
+- Resource is too big to fit in `262144` bytes allowed annotation size.
+- Patching of existing resources on the cluster that are not fully managed by Argo CD.
+- Use a more declarative approach, which tracks a user's field management, rather than a user's last applied state.
+  - If `ServerSideApply=true` sync option is set, Argo CD will use `kubectl apply --server-side` command to apply changes.
+
 ## Environment
 
 Kubernetes cluster deployed with Kubespray and added to a rancher cluster manually.
@@ -277,6 +292,7 @@ Kubernetes cluster deployed with Kubespray and added to a rancher cluster manual
 - [Break Down K8S Server-Side Apply][breakdown-k8s-ssa]
 - [Comparison with Client-Side Apply][comparison-with-client-side-apply]
 - [Argo-CD Server-Side Apply][argocd-ssa]
+- [Using Server-Side Apply in a controller][ssa-in-controller]
 
 [kubectl-apply]: https://youtu.be/1DWWlcDUxtA
 [breakdown-k8s-ssa]: https://medium.com/swlh/break-down-kubernetes-server-side-apply-5d59f6a14e26
@@ -290,3 +306,4 @@ Kubernetes cluster deployed with Kubespray and added to a rancher cluster manual
 [dry-run]: https://youtu.be/1DWWlcDUxtA?t=704
 [imperative-endpoints]: https://youtu.be/1DWWlcDUxtA?t=638
 [field-managers]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#managers
+[ssa-in-controller]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#using-server-side-apply-in-a-controller
