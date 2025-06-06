@@ -348,6 +348,10 @@ However, there are some cases where you want to use kubectl apply `--server-side
 - Use a more declarative approach, which tracks a user's field management, rather than a user's last applied state.
   - If `ServerSideApply=true` sync option is set, Argo CD will use `kubectl apply --server-side` command to apply changes.
 
+## Read More
+
+- [Argocd and HPA][argocd-and-hpa], The Question is how to control ArgoCD from interfering a Deployment Replicas when the HPA is Enabled for ?
+
 ## Environment
 
 Kubernetes cluster deployed with Kubespray and added to a rancher cluster manually.
@@ -376,3 +380,4 @@ Kubernetes cluster deployed with Kubespray and added to a rancher cluster manual
 [ssa-in-controller]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#using-server-side-apply-in-a-controller
 [cnflicts-image]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/kubectl-ssa-csa/conflict.webp
 [netshoot-deployment]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/kubectl-ssa-csa/manifests/netshoot-deployment.yaml
+[argocd-and-hpa]: https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/#respect-ignore-difference-configs
