@@ -3,7 +3,7 @@ title: TIL Kubectl CSA/SSA (Client/Server Side Apply)
 published: true
 description: digging the server side apply and client side apply
 tags: 'kubernetes,devops,k8s'
-cover_image: ./assets/kubectl-ssa-csa.webp
+cover_image: ./assets/kubectl-ssa-csa/kubectl-ssa-csa.webp
 id: 2566618
 date: '2025-06-05T14:39:43Z'
 ---
@@ -14,10 +14,10 @@ The need to read and dig into the SSA and CSA came from [command Annotation in I
 
 ## [Field management][field-mngmnt]
 
-</br></br>
+> The Kubernetes API server tracks managed fields for all newly created objects. When trying to apply an object, ***fields that have a different value*** **AND** ***are owned by another manager*** will result in a **conflict**. This is done in order to signal that the operation might undo another collaborator's changes. Writes to objects with managed fields can be forced, in which case the value of any conflicted field will be overridden, and the ownership will be transferred.
 
-> The Kubernetes API server tracks managed fields for all newly created objects. When trying to apply an object, fields that have a different value and are owned by another manager will result in a conflict. This is done in order to signal that the operation might undo another collaborator's changes. Writes to objects with managed fields can be forced, in which case the value of any conflicted field will be overridden, and the ownership will be transferred.
->
+![conflict-image][cnflicts-image]
+
 > Whenever a field's value does change, ownership moves from its current manager to the manager making the change.
 >
 > Compared to the (legacy) kubectl.kubernetes.io/last-applied-configuration annotation managed by kubectl, Server-Side Apply uses a more declarative approach, that tracks a user's (or client's) field management, rather than a user's last applied state. As a side effect of using Server-Side Apply, information about which field manager manages each field in an object also becomes available.
@@ -166,7 +166,11 @@ metadata:
 kubectl apply --server-side -f netshoot-current.yaml -n test-tool
 ```
 
-As we expected the [Conflict][conflicts] happened, because the owner of those ips fields is the CNI, in this case is `calico`.
+As we expected the [Conflict][conflicts] happened, because
+
+- The owner of those ips fields is the CNI, in this case is `calico`.
+- **AND**
+- The Value of those IP Fields are different.
 
 ```bash
 Error from server (BadRequest): metadata.managedFields must be nil
@@ -266,11 +270,74 @@ As you can see, the manager(owner) of the `podIP` and `podIPs` fields changed to
 
 ```
 
-## Usage in Tools
+## Conflict Example
 
-### ArgoCD
+Scenario:
 
-> This option enables Kubernetes [Server-Side Apply[server-side-apply]].
+- Apply [`netshoot-deployment.yaml`][netshoot-deployment] deployment with 1 replicas, no server-side, just as normal (CSA)
+  - Sets the Owner(manager) and operation of the `replicas` field to
+
+    ```yaml
+    manager: kubectl-client-side-apply
+    operation: Update
+    ```
+
+  - The `kubectl.kubernetes.io/last-applied-configuration` annotation exists.
+  - For the first time `apply` the manager for the whole fields is `kubectl-client-side-apply`.
+
+- Scale the pods with
+
+  ```bash
+  kubectl scale deployment netshoot -n test-tool --replicas 3
+  ```
+
+  - ad-hoc scale does not update the `last-applied-configuration` , just sets a new owner(manager) to the `replicas` field.
+
+    ```yaml
+    - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:replicas: {}
+    manager: kubectl
+    operation: Update
+    subresource: scale
+
+    ```
+
+- Another scale with changing the `replicas` in manifest and apply with `--server-side`, for example `replicas: 5`
+
+  ```bash
+  kubectl apply --server-side -f netshoot-deployment.yaml -n test-tool -v=6
+  ```
+
+  - Conflict `status="409 Conflict"`
+
+    ```bash
+    "Response" verb="PATCH" url="https://rancher.example.com/k8s/clusters/<CLUSTER_ID>/apis/apps/v1/namespaces/test-tool/deployments/netshoot?fieldManager=kubectl&fieldValidation=Strict&force=false" status="409 Conflict" milliseconds=75
+    ```
+
+    ```bash
+    error: Apply failed with 1 conflict: conflict with "kubectl" with subresource "scale" using apps/v1: .spec.replicas
+    Please review the fields above--they currently have other managers. Here
+    are the ways you can resolve this warning:
+    * If you intend to manage all of these fields, please re-run the apply
+      command with the `--force-conflicts` flag.
+    * If you do not intend to manage all of the fields, please edit your
+      manifest to remove references to the fields that should keep their
+      current managers.
+    * You may co-own fields by updating your manifest to match the existing
+      value; in this case, you'll become the manager if the other manager(s)
+      stop managing the field (remove it from their configuration).
+    See https://kubernetes.io/docs/reference/using-api/server-side-apply/#conflicts
+    ```
+
+- Why we expect a conflict?
+  > A conflict is a special status error that occurs when an Apply operation tries to change a field that another manager also claims to manage. This prevents an applier from unintentionally overwriting the value set by another user.
+
+## ArgoCD
+
+> This option enables Kubernetes [Server-Side Apply][server-side-apply].
 >
 > By default, Argo CD executes kubectl apply operation to apply the configuration stored in Git. This is a client side operation that relies on kubectl.kubernetes.io/last-applied-configuration annotation to store the previous resource state.
 
@@ -307,3 +374,5 @@ Kubernetes cluster deployed with Kubespray and added to a rancher cluster manual
 [imperative-endpoints]: https://youtu.be/1DWWlcDUxtA?t=638
 [field-managers]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#managers
 [ssa-in-controller]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#using-server-side-apply-in-a-controller
+[cnflicts-image]: ./assets/kubectl-ssa-csa/conflict.webp
+[netshoot-deployment]: ./assets/kubectl-ssa-csa/manifests/netshoot-deployment.yaml
