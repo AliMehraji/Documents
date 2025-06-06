@@ -374,5 +374,5 @@ Kubernetes cluster deployed with Kubespray and added to a rancher cluster manual
 [imperative-endpoints]: https://youtu.be/1DWWlcDUxtA?t=638
 [field-managers]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#managers
 [ssa-in-controller]: https://kubernetes.io/docs/reference/using-api/server-side-apply/#using-server-side-apply-in-a-controller
-[cnflicts-image]: ./assets/kubectl-ssa-csa/conflict.webp
-[netshoot-deployment]: ./assets/kubectl-ssa-csa/manifests/netshoot-deployment.yaml
+[cnflicts-image]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/kubectl-ssa-csa/conflict.webp
+[netshoot-deployment]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/kubectl-ssa-csa/manifests/netshoot-deployment.yaml
