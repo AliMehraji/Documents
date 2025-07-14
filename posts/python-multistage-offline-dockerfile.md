@@ -234,14 +234,16 @@ After build its size was `1.02GB`.
 After all Optimization and multistage Dockerfile its size reduced to `242MB`.
 
 ```docker
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.4 # Required for heredocs [3, 4]
 
+ARG PYTHON_VERSION=3.12.3
 ARG JFROG=jfrog.example.com
 
-FROM ${JFROG}/docker/python:3.13-slim AS base
+FROM ${JFROG}/docker/python:${PYTHON_VERSION}-slim AS base
 SHELL ["/bin/bash", "-c", "-o", "pipefail", "-o", "errexit"]
 
 ARG JFROG=jfrog.example.com
+
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
@@ -251,7 +253,7 @@ ENV PYTHONUNBUFFERED=1 \
 RUN <<EOF
 
 CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)
-DISTRO=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
+# DISTRO=$(grep '^ID=' /etc/os-release | cut -d'=' -f2)
 
 cat > /etc/apt/sources.list.d/debian.sources <<SOURCE_FILE_CONTENT
 Types: deb
@@ -268,18 +270,23 @@ Trusted: true
 SOURCE_FILE_CONTENT
 EOF
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# securely copy .netrc using BuildKit secrets
+RUN --mount=type=secret,id=netrc,target=/root/.netrc \
+    apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
-    curl \
     gnupg \
-    lsb-release \
+    curl \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS build
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential && \
-    rm -rf /var/lib/apt/lists/*
+# securely copy .netrc using BuildKit secrets
+RUN --mount=type=secret,id=netrc,target=/root/.netrc \
+    apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -288,7 +295,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip --timeout 100 install --no-cache-dir -r requirements.txt
+    pip install --timeout 100 --no-cache-dir --upgrade pip \
+    && pip install --timeout 100 --no-cache-dir -r requirements.txt
 
 FROM base AS runtime
 
@@ -310,6 +318,20 @@ COPY --chown=nonroot:nonroot main.py .
 CMD ["python", "/app/main.py"]
 
 ```
+
+## Notice
+
+After a second thought, realized there is no need for dockerfile syntax version 1.4 to manipulate the `apt` sources, it could be done with `sed`.
+The new dockerfile syntax was fun to learn, so i keep this guid as it is and reference to the Dockerfile with no new syntax.
+
+[Dockerfile][dockerfile-no-new-syntax]
+
+## Updates
+
+- Mon Jul 14 2025
+  - Add Credentials for Artifactories with authentication
+  - handled via `.netrc` and mount it in build time via [Buildkit][docker-buildkit-getting-start]
+  - no credential exposed in image history or saved in image with [Secret Mount][secret-mount]
 
 ## Resources
 
@@ -338,3 +360,5 @@ CMD ["python", "/app/main.py"]
 [cache-mount]: https://docs.docker.com/build/cache/optimize/#use-cache-mounts
 [copy-virtual-env]: https://pythonspeed.com/articles/multi-stage-docker-python/
 [pod-security-context]: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#supplementalgroupspolicy
+[dockerfile-no-new-syntax]: https://github.com/AliMehraji/Dockerfiles/blob/main/Offline-Dockerfiles/Dockerfile
+[secret-mount]: https://docs.docker.com/build/building/secrets/#secret-mounts

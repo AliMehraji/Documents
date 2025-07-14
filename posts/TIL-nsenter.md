@@ -1,7 +1,7 @@
 ---
 title: TIL `nsenter`
 published: true
-description: Today I Learned On May 28
+description: Today I Learned About nsenter
 tags: '#career,#k8s,#kubernetes'
 id: 2537346
 date: '2025-05-28T13:05:36Z'
@@ -204,4 +204,4 @@ To access `/proc/1/ns/mnt`:
 [ls-ns]: https://man7.org/linux/man-pages/man8/lsns.8.html
 [proc]: https://man7.org/linux/man-pages/man5/proc.5.html#
 [command-Annotation-discussion]: https://github.com/longhorn/longhorn/discussions/11008
-[discussion-answer]:https://github.com/longhorn/longhorn/discussions/11008#discussioncomment-13321110
+[discussion-answer]: https://github.com/longhorn/longhorn/discussions/11008#discussioncomment-13321110
