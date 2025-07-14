@@ -332,6 +332,22 @@ The new dockerfile syntax was fun to learn, so i keep this guid as it is and ref
   - Add Credentials for Artifactories with authentication
   - handled via `.netrc` and mount it in build time via [Buildkit][docker-buildkit-getting-start]
   - no credential exposed in image history or saved in image with [Secret Mount][secret-mount]
+  - Added Line
+
+    ```docker
+    RUN --mount=type=secret,id=netrc,target=/root/.netrc
+    ```
+
+  - After update, updating and installing packages steps
+
+    ```docker
+    # securely copy .netrc using BuildKit secrets
+    RUN --mount=type=secret,id=netrc,target=/root/.netrc \
+        apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
+    ```
 
 ## Resources
 
