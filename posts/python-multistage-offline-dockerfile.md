@@ -322,9 +322,10 @@ CMD ["python", "/app/main.py"]
 ## Notice
 
 After a second thought, realized there is no need for dockerfile syntax version 1.4 to manipulate the `apt` sources, it could be done with `sed`.
-The new dockerfile syntax was fun to learn, so i keep this guid as it is and reference to the Dockerfile with no new syntax.
 
-[Dockerfile][dockerfile-no-new-syntax]
+The new dockerfile syntax was fun to learn, so i keep this guide as it is.
+
+The [Dockerfile][dockerfile-no-new-syntax] with no new syntax and manipulating the `apt` sources via `sed`.
 
 ## Updates
 
