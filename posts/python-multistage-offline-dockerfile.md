@@ -272,20 +272,22 @@ EOF
 
 # securely copy .netrc using BuildKit secrets
 RUN --mount=type=secret,id=netrc,target=/root/.netrc \
-    apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    gnupg \
-    curl \
+    apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
+      ca-certificates \
+      gnupg \
+      curl \
     && apt-get clean \
+    && apt-get remove --purge --auto-remove -y \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS build
 
 # securely copy .netrc using BuildKit secrets
 RUN --mount=type=secret,id=netrc,target=/root/.netrc \
-    apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+    apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
+      build-essential \
     && apt-get clean \
+    && apt-get remove --purge --auto-remove -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -295,8 +297,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --timeout 100 --no-cache-dir --upgrade pip \
-    && pip install --timeout 100 --no-cache-dir -r requirements.txt
+    pip install --timeout 100 --no-cache-dir --upgrade pip && \
+    pip install --timeout 100 --no-cache-dir -r requirements.txt
 
 FROM base AS runtime
 
