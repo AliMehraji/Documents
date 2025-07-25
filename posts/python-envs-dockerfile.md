@@ -1,8 +1,10 @@
 ---
-title: 'Python Env Variables in Dockerfile'
+title: Python Env Variables in Dockerfile
 published: true
 description: Python environment variables to set globally in Dockerfile
 tags: 'docker,python,devops'
+id: 2722999
+date: '2025-07-25T17:45:36Z'
 ---
 
 It is necessary to set Python-specific environment variables in Dockerfile. Some of these variables are optional, while others are essential.
