@@ -47,9 +47,9 @@ THis Environment Variable is used for on-premises/private PYPI artifactory.
 
 Example, invoke `pip --help` to get the cli options (flags)
 
-- `--disable-pip-version-check` --> `PIP_DISABLE_PIP_VERSION_CHECK`
-- `--timeout` --> `PIP_TIMEOUT`
-- `--no-color` --> `PIP_NO_COLOR` </br></br></br>
+`--disable-pip-version-check` --> `PIP_DISABLE_PIP_VERSION_CHECK` </br></br>
+`--timeout` --> `PIP_TIMEOUT` </br></br>
+`--no-color` --> `PIP_NO_COLOR` </br></br></br>
 
 ```bash
   General Options:
