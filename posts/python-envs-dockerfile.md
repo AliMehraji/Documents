@@ -25,7 +25,7 @@ ENV PYTHONUNBUFFERED=1 \
     - **Streaming logs** to systems like `ELK`, `Loki`, etc.
 
 - [PYTHONDONTWRITEBYTECODE][envvar-PYTHONDONTWRITEBYTECODE]
-  > If this is set to a non-empty string, Python won’t try to write .pyc files on the import of source modules. This is equivalent to specifying the -B option.
+  > If this is set to a non-empty string, Python won’t try to write .pyc files on the import of source modules. This is equivalent to specifying the `-B` option.
   - Disables writing `.pyc` files (compiled bytecode) to disk.
   - Prevents Python from creating:
     - `__pycache__/`
@@ -33,17 +33,17 @@ ENV PYTHONUNBUFFERED=1 \
   - Keeps the container **clean and lightweight**.
   - Avoids unnecessary file writes (especially important on container read-only filesystems or volume mounts).
 
-- `PIP_INDEX_URL` is for on-premises/private PYPI artifactory
+- `PIP_INDEX_URL` is for on-premises/private PYPI artifactory.
 
     > pip’s command line options can be set with environment variables using the format `PIP_<UPPER_LONG_NAME>`.
     >
-    > Dashes (-) have to be replaced with underscores (_).
+    > Dashes (`-`) have to be replaced with underscores (`_`).
 
     Example, invoke `pip --help` to get the cli options (flags)
 
-      * `--disable-pip-version-check` --> `PIP_DISABLE_PIP_VERSION_CHECK`
-      * `--timeout` --> `PIP_TIMEOUT`
-      * `--no-color` --> `PIP_NO_COLOR` </br></br></br>
+  - `--disable-pip-version-check` --> `PIP_DISABLE_PIP_VERSION_CHECK`
+  - `--timeout` --> `PIP_TIMEOUT`
+  - `--no-color` --> `PIP_NO_COLOR` </br></br></br>
 
     ```bash
       General Options:

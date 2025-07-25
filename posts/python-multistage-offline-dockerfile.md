@@ -60,7 +60,7 @@ FROM ${JFROG}/docker/python:3.13-slim AS base
 SHELL ["/bin/bash", "-c", "-o", "pipefail", "-o", "errexit"]
 ```
 
-- Environments
+- Environments, see [Python Env Variables in Dockerfile][python-env-var-in-dockerfile]
 
 ```docker
 ARG JFROG=jfrog.example.com
@@ -68,14 +68,9 @@ ARG JFROG=jfrog.example.com
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_TIMEOUT=60 \
     PIP_INDEX_URL=https://${JFROG}/artifactory/api/pypi/python/simple/
 ```
-
-- [`PYTHONUNBUFFERED`][python-unbuffered]
-- [`PYTHONDONTWRITEBYTECODE`][python-dont-write-bytecode]
-- `PIP_DISABLE_PIP_VERSION_CHECK`: makes pip check or not to check its version during the requirements installation. (`on`/`off`)
-- [`PIP_INDEX_URL`][pip_install]: sets the custom index url for pip globally to download and install.
-- If the structure of the PYPI repo is different in a private repo , please change the value of `PIP_INDEX_URL`.
 
 - Private Debian Repository (Offline Installation)
 
@@ -247,6 +242,7 @@ ARG JFROG=jfrog.example.com
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_TIMEOUT=60 \
     PIP_INDEX_URL=https://${JFROG}/artifactory/api/pypi/python/simple/
 
 # Using DEB822 format (.sources files) - for newer systems
@@ -381,3 +377,4 @@ The [Dockerfile][dockerfile-no-new-syntax] with no new syntax and manipulating t
 [pod-security-context]: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#supplementalgroupspolicy
 [dockerfile-no-new-syntax]: https://github.com/AliMehraji/Dockerfiles/blob/main/Offline-Dockerfiles/Dockerfile
 [secret-mount]: https://docs.docker.com/build/building/secrets/#secret-mounts
+[python-env-var-in-dockerfile]: https://dev.to/alimehr75/python-env-variables-in-dockerfile-5920
