@@ -37,7 +37,7 @@ ENV PYTHONUNBUFFERED=1 \
 - Keeps the container **clean and lightweight**.
 - Avoids unnecessary file writes (especially important on container read-only filesystems or volume mounts).
 
-### `PIP_INDEX_URL`
+### [PIP_INDEX_URL][pip-env-variable]
 
 THis Environment Variable is used for on-premises/private PYPI artifactory.
 
