@@ -39,17 +39,19 @@ ENV PYTHONUNBUFFERED=1 \
 
 ### [PIP_INDEX_URL][pip-env-variable]
 
-THis Environment Variable is used for on-premises/private PYPI artifactory.
+This environment variable is used for on-premises/private PYPI artifactory.
 
 > pip’s command line options can be set with environment variables using the format `PIP_<UPPER_LONG_NAME>`.
 >
 > Dashes (`-`) have to be replaced with underscores (`_`).
 
-Example, invoke `pip --help` to get the cli options (flags)
+Example:
 
 `--disable-pip-version-check` --> `PIP_DISABLE_PIP_VERSION_CHECK` </br></br>
 `--timeout` --> `PIP_TIMEOUT` </br></br>
 `--no-color` --> `PIP_NO_COLOR` </br></br></br>
+
+> invoke `pip --help` to get the cli options (flags)
 
 ```bash
   General Options:
@@ -76,7 +78,7 @@ Example, invoke `pip --help` to get the cli options (flags)
 
 - **Security best practices in K8S**
 
-  > running processes with `nonroot` users with `USER nonroot:nonroot` in Dockerfile Or `SecurityContexts` Like `fsGroup` , `runAsGroup`, and `runAsUser`, in pod template, the filesystem is read-only so the `PYTHONDONTWRITEBYTECODE=1` has to be set.
+  > Running processes as a non-root user using USER nonroot:nonroot in the Dockerfile allows Kubernetes SecurityContext settings such as fsGroup, runAsGroup, and runAsUser to take effect in the pod template. Additionally, because the filesystem is set to read-only, PYTHONDONTWRITEBYTECODE=1 must be set to prevent Python from writing .pyc files.
 
 ## Resources
 
