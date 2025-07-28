@@ -78,7 +78,7 @@ Example:
 
 - **Security best practices in K8S**
 
-  > Running processes as a non-root user using USER nonroot:nonroot in the Dockerfile allows Kubernetes SecurityContext settings such as fsGroup, runAsGroup, and runAsUser to take effect in the pod template. Additionally, because the filesystem is set to read-only, PYTHONDONTWRITEBYTECODE=1 must be set to prevent Python from writing .pyc files.
+  > Running processes as a non-root user using `USER nonroot:nonroot` in the Dockerfile allows Kubernetes `SecurityContext` settings such as `fsGroup`, `runAsGroup`, and `runAsUser` to take effect in the pod template. Additionally, because the filesystem is set to `read-only`, `PYTHONDONTWRITEBYTECODE=1` must be set to prevent Python from writing `.pyc` files.
 
 ## Resources
 
