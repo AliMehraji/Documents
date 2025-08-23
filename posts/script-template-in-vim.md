@@ -3,7 +3,7 @@ title: Script Template in vim
 published: true
 description: Defining a Script Template with files suffix in vim.
 tags: 'vim,template,script'
-cover_image: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/script-template-in-vim/vim-1.webp
+cover_image: 'https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/script-template-in-vim/vim-1.webp'
 canonical_url: null
 id: 2319653
 date: '2025-03-08T23:05:25Z'

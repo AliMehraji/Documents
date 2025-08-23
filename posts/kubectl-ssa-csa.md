@@ -3,7 +3,7 @@ title: TIL Kubectl CSA/SSA (Client/Server Side Apply)
 published: true
 description: digging the server side apply and client side apply
 tags: 'kubernetes,devops,k8s'
-cover_image: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/kubectl-ssa-csa/kubectl-ssa-csa.webp
+cover_image: 'https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/kubectl-ssa-csa/kubectl-ssa-csa.webp'
 id: 2566618
 date: '2025-06-05T14:39:43Z'
 ---
