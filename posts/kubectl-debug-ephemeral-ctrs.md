@@ -3,7 +3,7 @@ title: kubectl debug
 published: true
 description: Deep Diving Kubernetes Ephemeral Containers and kubectl debug Command
 tags: kubernetes
-cover_image: ./assets/k8s-debug-ctr-in-pod-shared-ns.webP
+cover_image: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/k8s-debug-ctr-in-pod-shared-ns.webP
 canonical_url: null
 id: 2795240
 date: '2025-08-23T22:29:01Z'
@@ -194,7 +194,7 @@ kubectl debug -it -c debugger --target=distroless-nginx-ctr --profile=sysadmin -
 [ephemeral-ctrs-feature-request]: https://github.com/kubernetes/enhancements/issues/277
 [FR: New kubectl command]: https://github.com/kubernetes/kubernetes/issues/45922
 
-[shared-ns-img]: ./assets/k8s-debug-ctr-in-pod-shared-ns.webP
-[after-ns-shared]: ./assets/ctr-in-pod-shared-pid-ns.WebP
+[shared-ns-img]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/k8s-debug-ctr-in-pod-shared-ns.webP
+[after-ns-shared]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/ctr-in-pod-shared-pid-ns.WebP
 
 [debugging-profiles]: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#debugging-profiles
