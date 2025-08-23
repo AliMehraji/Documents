@@ -3,7 +3,7 @@ title: kubectl debug
 published: true
 description: Deep Diving Kubernetes Ephemeral Containers and kubectl debug Command
 tags: kubernetes
-cover_image: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/k8s-debug-ctr-in-pod-shared-ns.webP
+cover_image: 'https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/k8s-debug-ctr-in-pod-shared-ns.webP'
 canonical_url: null
 id: 2795240
 date: '2025-08-23T22:29:01Z'
