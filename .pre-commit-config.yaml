@@ -2,22 +2,17 @@
 repos:
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.5.0
+  - repo: https://github.com/trufflesecurity/trufflehog
+    rev: v3.90.5
     hooks:
-      - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
+      - id: trufflehog
 
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.26.0
-    hooks:
-      - id: gitleaks
   # gem needs to be installed
   - repo: https://github.com/markdownlint/markdownlint
     rev: v0.12.0
