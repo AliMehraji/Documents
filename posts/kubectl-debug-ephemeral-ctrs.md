@@ -2,9 +2,11 @@
 title: kubectl debug
 published: true
 description: Deep Diving Kubernetes Ephemeral Containers and kubectl debug Command
-tags: 'kubernetes'
+tags: kubernetes
 cover_image: ./assets/k8s-debug-ctr-in-pod-shared-ns.webP
 canonical_url: null
+id: 2795240
+date: '2025-08-23T22:29:01Z'
 ---
 
 [Ephemeral containers][k8s-docs-ephemeral-containers] provide a powerful way to debug applications running in Kubernetes. Unlike regular containers, they are not part of the pod’s original specification but can be injected into a running pod when needed. This makes them especially valuable for interactive troubleshooting, particularly when `kubectl exec` is insufficient—for example, when a container has already crashed or when the original image lacks essential debugging tools.
