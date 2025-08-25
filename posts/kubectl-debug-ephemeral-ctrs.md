@@ -1,5 +1,5 @@
 ---
-title: kubectl debug
+title: Kubernetes Ephemeral Containers and kubectl debug Command
 published: true
 description: Deep Diving Kubernetes Ephemeral Containers and kubectl debug Command
 tags: kubernetes
