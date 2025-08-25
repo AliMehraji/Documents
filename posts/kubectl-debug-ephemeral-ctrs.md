@@ -9,6 +9,8 @@ id: 2795240
 date: '2025-08-23T22:29:01Z'
 ---
 
+> This post is only a brief overview, with references collected at the end. If you’d like to dive deeper, I recommend starting with [Deep Diving Kubernetes Ephemeral Containers and kubectl debug Command][ix-posts-ephemeral-containers] and then following the related [Task: Copy Files To/From a Distroless Kubernetes Pod][ix-task-copy-files-to-from-distroless-kubernetes-pod].
+
 [Ephemeral containers][k8s-docs-ephemeral-containers] provide a powerful way to debug applications running in Kubernetes. Unlike regular containers, they are not part of the pod’s original specification but can be injected into a running pod when needed. This makes them especially valuable for interactive troubleshooting, particularly when `kubectl exec` is insufficient—for example, when a container has already crashed or when the original image lacks essential debugging tools.
 
 Modern container practices often favor minimal or `distroless` images to improve security and performance. In many cases, base images are stripped down to the essential. sometimes even using `scratch` with nothing but the application binary. While this approach:
