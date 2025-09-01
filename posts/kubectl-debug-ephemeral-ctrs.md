@@ -161,6 +161,33 @@ kubectl debug -it -c debugger --target=distroless-nginx-ctr --profile=sysadmin -
   - Service account token access from unexpected pods
   - Debug sessions lasting >5 minutes
 
+### `kubectl debug node`
+
+```bash
+k debug node/debian-11 -it --image-pull-policy='IfNotPresent' --image=ubuntu --profile=sysadmin
+```
+
+[When creating a debugging session on a node, keep in mind that][shell-debug-on-node]:
+
+- `kubectl debug` automatically generates the name of the new Pod based on the name of the Node.
+- The root filesystem of the Node will be mounted at `/host`.
+- The container runs in the host IPC, Network, and PID namespaces, although the pod isn't privileged, so reading some process information may fail, and `chroot /host` may fail.
+- If you need a privileged pod, create it manually or use the `--profile=sysadmin` flag.
+
+To debug node like an SSH session, just invoke `chroot /host`.
+
+```bash
+Creating debugging pod node-debugger-debian-11-wrjhs with container debugger on node debian-11.
+If you don't see a command prompt, try pressing enter.
+/ # chroot /host
+```
+
+Don't forget to clean up the debugging Pod when you're finished with it:
+
+```bash
+kubectl delete pod node-debugger-debian-11-wrjhs
+```
+
 ## Resources
 
 - [Docker Containers vs. Kubernetes Pods - Taking a Deeper Look][ix-posts-containers-vs-pods]
@@ -175,6 +202,8 @@ kubectl debug -it -c debugger --target=distroless-nginx-ctr --profile=sysadmin -
   - [The future of Kubernetes workload debugging][medium-ephemeral-containers]
 - [Share Process Namespace between Containers in a Pod][share-process-namespace]
 - [kubectl Debug Exposed Kubernetes Cluster][medium-share-proc-exposed]
+- [Debug node][kubectl-debug-node]
+- [Debugging via a shell on the node][shell-debug-on-node]
 
 - Tasks
   - [Debugging with an ephemeral debug container][k8s-docs-debug-pod]
@@ -202,3 +231,6 @@ kubectl debug -it -c debugger --target=distroless-nginx-ctr --profile=sysadmin -
 [after-ns-shared]: https://raw.githubusercontent.com/AliMehraji/Documents/refs/heads/main/posts/assets/ctr-in-pod-shared-pid-ns.WebP
 
 [debugging-profiles]: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#debugging-profiles
+
+[kubectl-debug-node]: https://kubernetes.io/docs/tasks/debug/debug-cluster/kubectl-node-debug/
+[shell-debug-on-node]: https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#node-shell-session
