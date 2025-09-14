@@ -101,3 +101,4 @@ So be careful when you use double quotes and tell those people there is a differ
 - [Gnu.org](https://www.gnu.org/software/bash/)
 - [Bash Documents](https://www.gnu.org/software/bash/manual/)
 - [Book](https://www.amazon.ca/Learning-bash-Shell-Unix-Programming/dp/0596009658)
+- [Special Parameters](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html)
