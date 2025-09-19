@@ -109,6 +109,26 @@ For Running [Discord](https://discord.com/) through a Proxy Server :
   > That file will be overwritten when Discord updated. </br>
   > Try to not install Discord via Snap or Flatpak , I recommend To install it via package-manager or its source.
 
+  Its better to add proxy server in its `wrapper` which is an updater:
+
+  ```bash
+  ls -l /usr/bin/Discord 
+  lrwxrwxrwx. 1 root root 27 Sep 18 03:30 /usr/bin/Discord -> ../lib64/discord/wrapper.sh
+  ```
+
+  ```shell
+  #!/usr/bin/bash
+
+   # Path to discord binary
+   DISCORD_BIN=$(dirname $(readlink -f $0))/Discord
+
+   # Run python script to disable check updates
+   /usr/lib64/discord/disable-breaking-updates.py
+
+   # Launch discord
+   exec "$DISCORD_BIN" "$@" --proxy-server="127.0.0.1:10808"
+  ```
+
 ## Vscode
 
 vscode desktop config file is `/usr/share/applications/code.desktop` :
