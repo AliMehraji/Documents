@@ -1,8 +1,10 @@
 ---
 title: OOMKill in Kubernetes and Linux (Exit Code 137)
 published: true
-description:
+description: null
 tags: 'linux,bash,kubernetes'
+id: 2861019
+date: '2025-09-22T13:23:25Z'
 ---
 
 When a container(process) is terminated due to an [Out Of Memory (OOM) manager][out-of-mem-mngmnt] condition, Kubernetes marks it as **OOMKilled**. In this case , the Linux kernel’s OOM Killer terminates the process and the container exits with exit code [**137**][list-of-exit-codes]. This exit code is an important troubleshooting signal in Kubernetes.
